@@ -10,14 +10,12 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import java.util.List;
 
 public class GameMessageRateLimit extends MessageToMessageDecoder<ClientMessage> {
-
     private static final int RESET_TIME = 1;
     private static final int MAX_COUNTER = 10;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ClientMessage message, List<Object> out) {
         GameClient client = ctx.channel().attr(GameServerAttributes.CLIENT).get();
-
         if (client == null) {
             return;
         }
@@ -45,5 +43,4 @@ public class GameMessageRateLimit extends MessageToMessageDecoder<ClientMessage>
         // Continue processing.
         out.add(message);
     }
-
 }

@@ -20,8 +20,6 @@ import java.util.List;
 
 @Slf4j
 public class InteractionFireworks extends InteractionDefault {
-
-
     private static final String STATE_EMPTY = "0"; // Not used since the removal of pixels
     private static final String STATE_CHARGED = "1";
     private static final String STATE_EXPLOSION = "2";

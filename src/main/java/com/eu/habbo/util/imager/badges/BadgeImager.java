@@ -18,17 +18,14 @@ import java.util.Map;
 
 @Slf4j
 public class BadgeImager {
-    
     final THashMap<String, BufferedImage> cachedImages = new THashMap<>();
 
     public BadgeImager() {
-        if (Emulator.getConfig().getBoolean("imager.internal.enabled")) {
-            if (this.reload()) {
+        if (Emulator.getConfig().getBoolean("imager.internal.enabled"))
+            if (this.reload())
                 log.info("Badge Imager -> Loaded!");
-            } else {
+            else
                 log.warn("Badge Imager -> Disabled! Please check your configuration!");
-            }
-        }
     }
 
     public static BufferedImage deepCopy(BufferedImage bi) {
@@ -41,68 +38,130 @@ public class BadgeImager {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
+    //public static void recolor(BufferedImage image, Color maskColor) {
+    //    for (int x = 0; x < image.getWidth(); x++)
+    //        for (int y = 0; y < image.getHeight(); y++) {
+    //            int pixel = image.getRGB(x, y);
+    //
+    //            if ((pixel >> 24) == 0x00)
+    //                continue;
+    //
+    //            Color color = new Color(pixel);
+    //
+    //            float alpha = (color.getAlpha() / 255.0F) * (maskColor.getAlpha() / 255.0F);
+    //            float red = (color.getRed() / 255.0F) * (maskColor.getRed() / 255.0F);
+    //            float green = (color.getGreen() / 255.0F) * (maskColor.getGreen() / 255.0F);
+    //            float blue = (color.getBlue() / 255.0F) * (maskColor.getBlue() / 255.0F);
+    //
+    //            color = new Color(red, green, blue, alpha);
+    //
+    //            int rgb = color.getRGB();
+    //            image.setRGB(x, y, rgb);
+    //        }
+    //}
+
     public static void recolor(BufferedImage image, Color maskColor) {
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                int pixel = image.getRGB(x, y);
-
-                if ((pixel >> 24) == 0x00)
-                    continue;
-
-                Color color = new Color(pixel);
-
-                float alpha = (color.getAlpha() / 255.0F) * (maskColor.getAlpha() / 255.0F);
-                float red = (color.getRed() / 255.0F) * (maskColor.getRed() / 255.0F);
-                float green = (color.getGreen() / 255.0F) * (maskColor.getGreen() / 255.0F);
-                float blue = (color.getBlue() / 255.0F) * (maskColor.getBlue() / 255.0F);
-
-                color = new Color(red, green, blue, alpha);
-
-                int rgb = color.getRGB();
-                image.setRGB(x, y, rgb);
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int[] pixels = image.getRGB(0, 0, width, height, null, 0, width);
+    
+        for (int i = 0; i < pixels.length; i++) {
+            int pixel = pixels[i];
+    
+            if ((pixel >> 24) == 0x00) {
+                continue;
             }
+    
+            float alpha = ((pixel >> 24) & 0xff) / 255f;
+            float red = ((pixel >> 16) & 0xff) / 255f;
+            float green = ((pixel >> 8) & 0xff) / 255f;
+            float blue = (pixel & 0xff) / 255f;
+    
+            red *= maskColor.getRed() / 255f;
+            green *= maskColor.getGreen() / 255f;
+            blue *= maskColor.getBlue() / 255f;
+            alpha *= maskColor.getAlpha() / 255f;
+    
+            pixel = ((int)(alpha * 255f + 0.5f) << 24 |
+                    (int)(red * 255f + 0.5f) << 16 |
+                    (int)(green * 255f + 0.5f) << 8 |
+                    (int)(blue * 255f + 0.5f));
+    
+            pixels[i] = pixel;
         }
-    }
+    
+        image.setRGB(0, 0, width, height, pixels, 0, width);
+    }    
 
     public static Color colorFromHexString(String colorStr) {
         try {
-            return new Color(
-                    Integer.parseInt(colorStr, 16));
+            return new Color(Integer.parseInt(colorStr, 16));
         } catch (Exception e) {
             return new Color(0xffffff);
         }
     }
 
+    //public static Point getPoint(BufferedImage image, BufferedImage imagePart, int position) {
+    //    int x = 0;
+    //    int y = 0;
+    //
+    //    if (position == 1) {
+    //        x = (image.getWidth() - imagePart.getWidth()) / 2;
+    //        y = 0;
+    //    } else if (position == 2) {
+    //        x = image.getWidth() - imagePart.getWidth();
+    //        y = 0;
+    //    } else if (position == 3) {
+    //        x = 0;
+    //        y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
+    //    } else if (position == 4) {
+    //        x = (image.getWidth() / 2) - (imagePart.getWidth() / 2);
+    //        y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
+    //    } else if (position == 5) {
+    //        x = image.getWidth() - imagePart.getWidth();
+    //        y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
+    //    } else if (position == 6) {
+    //        x = 0;
+    //        y = image.getHeight() - imagePart.getHeight();
+    //    } else if (position == 7) {
+    //        x = ((image.getWidth() - imagePart.getWidth()) / 2);
+    //        y = image.getHeight() - imagePart.getHeight();
+    //    } else if (position == 8) {
+    //        x = image.getWidth() - imagePart.getWidth();
+    //        y = image.getHeight() - imagePart.getHeight();
+    //    }
+    //
+    //    return new Point(x, y);
+    //}
+
     public static Point getPoint(BufferedImage image, BufferedImage imagePart, int position) {
         int x = 0;
         int y = 0;
-
-        if (position == 1) {
-            x = (image.getWidth() - imagePart.getWidth()) / 2;
-            y = 0;
-        } else if (position == 2) {
-            x = image.getWidth() - imagePart.getWidth();
-            y = 0;
-        } else if (position == 3) {
-            x = 0;
-            y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
-        } else if (position == 4) {
-            x = (image.getWidth() / 2) - (imagePart.getWidth() / 2);
-            y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
-        } else if (position == 5) {
-            x = image.getWidth() - imagePart.getWidth();
-            y = (image.getHeight() / 2) - (imagePart.getHeight() / 2);
-        } else if (position == 6) {
-            x = 0;
-            y = image.getHeight() - imagePart.getHeight();
-        } else if (position == 7) {
-            x = ((image.getWidth() - imagePart.getWidth()) / 2);
-            y = image.getHeight() - imagePart.getHeight();
-        } else if (position == 8) {
-            x = image.getWidth() - imagePart.getWidth();
-            y = image.getHeight() - imagePart.getHeight();
+    
+        int[] xValues = {
+                (image.getWidth() - imagePart.getWidth()) / 2,
+                image.getWidth() - imagePart.getWidth(), 0,
+                (image.getWidth() / 2) - (imagePart.getWidth() / 2),
+                image.getWidth() - imagePart.getWidth(), 0,
+                ((image.getWidth() - imagePart.getWidth()) / 2),
+                image.getWidth() - imagePart.getWidth()
+            };
+        int[] yValues = {
+                0,
+                0,
+                (image.getHeight() / 2) - (imagePart.getHeight() / 2),
+                (image.getHeight() / 2) - (imagePart.getHeight() / 2),
+                (image.getHeight() / 2) - (imagePart.getHeight() / 2),
+                image.getHeight() - imagePart.getHeight(),
+                image.getHeight() - imagePart.getHeight(),
+                image.getHeight() - imagePart.getHeight()
+            };
+    
+        if (position >= 1 && position <= 8) {
+            x = xValues[position - 1];
+            y = yValues[position - 1];
         }
-
+    
         return new Point(x, y);
     }
 
@@ -179,7 +238,6 @@ public class BadgeImager {
                 i++;
             }
         }
-
 
         BufferedImage image = new BufferedImage(39, 39, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = image.getGraphics();

@@ -13,45 +13,46 @@ public class StalkUser extends RCONMessage<StalkUser.StalkUserJSON> {
     @Override
     public void handle(Gson gson, StalkUserJSON json) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
+        if (habbo == null) {
+            this.message = "User with ID " + Integer.toString(json.user_id) + " could not be found!";
+            this.status = RCONMessage.HABBO_NOT_FOUND;
+            return;
+        }
 
-        if (habbo != null) {
-            Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.follow_id);
+        String user_id = Integer.toString(json.user_id);
 
-            if (target == null) {
-                this.message = Emulator.getTexts().getValue("commands.error.cmd_stalk.not_found").replace("%user%", json.user_id + "");
-                this.status = STATUS_ERROR;
-                return;
-            }
+        Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.follow_id);
+        if (target == null) {
+            this.message = Emulator.getTexts().getValue("commands.error.cmd_stalk.not_found").replace("%user%", user_id);
+            this.status = STATUS_ERROR;
+            return;
+        }
 
-            if (target.getHabboInfo().getCurrentRoom() == null) {
-                this.message = Emulator.getTexts().getValue("commands.error.cmd_stalk.not_room").replace("%user%", json.user_id + "");
-                this.status = STATUS_ERROR;
-                return;
-            }
+        if (target.getHabboInfo().getCurrentRoom() == null) {
+            this.message = Emulator.getTexts().getValue("commands.error.cmd_stalk.not_room").replace("%user%", user_id);
+            this.status = STATUS_ERROR;
+            return;
+        }
 
-            if (target.getHabboInfo().getUsername().equals(habbo.getHabboInfo().getUsername())) {
-                this.message = Emulator.getTexts().getValue("commands.generic.cmd_stalk.self").replace("%user%", json.user_id + "");
-                this.status = STATUS_ERROR;
-                return;
-            }
+        if (target.getHabboInfo().getUsername().equals(habbo.getHabboInfo().getUsername())) {
+            this.message = Emulator.getTexts().getValue("commands.generic.cmd_stalk.self").replace("%user%", user_id);
+            this.status = STATUS_ERROR;
+            return;
+        }
 
-            if (target.getHabboInfo().getCurrentRoom() == habbo.getHabboInfo().getCurrentRoom()) {
-                this.message = Emulator.getTexts().getValue("commands.generic.cmd_stalk.same_room").replace("%user%", json.user_id + "");
-                this.status = STATUS_ERROR;
-                return;
-            }
+        if (target.getHabboInfo().getCurrentRoom() == habbo.getHabboInfo().getCurrentRoom()) {
+            this.message = Emulator.getTexts().getValue("commands.generic.cmd_stalk.same_room").replace("%user%", user_id);
+            this.status = STATUS_ERROR;
+            return;
+        }
 
-            if (this.status == 0) {
-                habbo.getClient().sendResponse(new RoomForwardMessageComposer(target.getHabboInfo().getCurrentRoom().getId()));
-            }
+        if (this.status == 0) {
+            habbo.getClient().sendResponse(new RoomForwardMessageComposer(target.getHabboInfo().getCurrentRoom().getId()));
         }
     }
 
     static class StalkUserJSON {
-
         public int user_id;
-
-
         public int follow_id;
     }
 }

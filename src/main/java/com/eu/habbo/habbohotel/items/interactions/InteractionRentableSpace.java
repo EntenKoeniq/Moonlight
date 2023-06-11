@@ -262,6 +262,6 @@ public class InteractionRentableSpace extends HabboItem {
     }
 
     public void sendRentWidget(Habbo habbo) {
-        habbo.getClient().sendResponse(new RentableSpaceStatusMessageComposer(habbo, this, this.getRentErrorCode(habbo)));
+        habbo.getClient().sendResponse(new RentableSpaceStatusMessageComposer(this, this.getRentErrorCode(habbo)));
     }
 }

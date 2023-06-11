@@ -7,6 +7,12 @@ import com.eu.habbo.messages.outgoing.camera.CameraPriceComposer;
 public class RequestCameraConfigurationEvent extends MessageHandler {
     @Override
     public void handle() {
-        this.client.sendResponse(new CameraPriceComposer(Emulator.getConfig().getInt("camera.price.credits"), Emulator.getConfig().getInt("camera.price.points"), Emulator.getConfig().getInt("camera.price.points.publish")));
+        this.client.sendResponse(
+            new CameraPriceComposer(
+                Emulator.getConfig().getInt("camera.price.credits"),
+                Emulator.getConfig().getInt("camera.price.points"),
+                Emulator.getConfig().getInt("camera.price.points.publish")
+            )
+        );
     }
 }

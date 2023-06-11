@@ -2,10 +2,16 @@ package com.eu.habbo.messages.incoming.camera;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.incoming.MessageHandler;
+import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.outgoing.camera.ThumbnailStatusMessageComposer;
-import com.eu.habbo.networking.camera.CameraClient;
-import com.eu.habbo.networking.camera.messages.outgoing.CameraRenderImageComposer;
-import com.eu.habbo.util.crypto.ZIP;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class RenderRoomThumbnailEvent extends MessageHandler {
     @Override
@@ -15,23 +21,35 @@ public class RenderRoomThumbnailEvent extends MessageHandler {
             return;
         }
 
-        if (!this.client.getHabbo().getHabboInfo().getCurrentRoom().isOwner(this.client.getHabbo()))
+        Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
+        if (room == null)
             return;
 
-        if (CameraClient.isLoggedIn) {
-            this.packet.getBuffer().readFloat();
-            byte[] data = this.packet.getBuffer().readBytes(this.packet.getBuffer().readableBytes()).array();
-            String content = new String(ZIP.inflate(data));
+        if (!room.isOwner(this.client.getHabbo()))
+            return;
 
-            CameraRenderImageComposer composer = new CameraRenderImageComposer(this.client.getHabbo().getHabboInfo().getId(), this.client.getHabbo().getHabboInfo().getCurrentRoom().getBackgroundTonerColor().getRGB(), 110, 110, content);
+        final int count = this.packet.readInt();
 
-            this.client.getHabbo().getHabboInfo().setPhotoJSON(Emulator.getConfig().getValue("camera.extradata").replace("%timestamp%", composer.timestamp + ""));
-            this.client.getHabbo().getHabboInfo().setPhotoTimestamp(composer.timestamp);
-
-            Emulator.getCameraClient().sendMessage(composer);
-        } else {
-            this.client.sendResponse(new ThumbnailStatusMessageComposer());
-            this.client.getHabbo().alert(Emulator.getTexts().getValue("camera.disabled"));
+        ByteBuf image = this.packet.getBuffer().readBytes(count);
+        if(image == null)
+            return;
+        
+        BufferedImage theImage = null;
+        try {
+            try (ByteBufInputStream in = new ByteBufInputStream(image)) {
+                theImage = ImageIO.read(in);
+            } finally {
+                // from here we don't need the `image` buffer anymore
+                image.clear();
+                image.release();
+            }
+            File imageFile = new File(Emulator.getConfig().getValue("imager.location.output.thumbnail") + room.getId() + ".png");
+            ImageIO.write(theImage, "png", imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.client.getHabbo().alert("Oops! Something went wrong :(");
+            return;
         }
+        this.client.sendResponse(new ThumbnailStatusMessageComposer());
     }
 }

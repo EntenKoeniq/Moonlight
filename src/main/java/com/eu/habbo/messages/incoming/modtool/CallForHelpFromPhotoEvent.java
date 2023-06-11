@@ -20,11 +20,11 @@ public class CallForHelpFromPhotoEvent extends MessageHandler {
         this.packet.getBuffer().resetReaderIndex();
 
         if (hasExtradataId) {
-            String extradataId = this.packet.readString();
+            this.packet.readString();
         }
 
         int roomId = this.packet.readInt();
-        int reportedUserId = this.packet.readInt();
+        this.packet.readInt();
         int topicId = this.packet.readInt();
         int itemId = this.packet.readInt();
 

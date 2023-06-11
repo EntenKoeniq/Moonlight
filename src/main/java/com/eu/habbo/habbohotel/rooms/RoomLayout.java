@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 

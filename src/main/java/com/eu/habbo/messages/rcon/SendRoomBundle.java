@@ -15,29 +15,29 @@ public class SendRoomBundle extends RCONMessage<SendRoomBundle.JSON> {
 
     @Override
     public void handle(Gson gson, JSON json) {
-        if (json.catalog_page > 0 && json.user_id > 0) {
-            Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
-            CatalogPage page = Emulator.getGameEnvironment().getCatalogManager().getCatalogPage(json.catalog_page);
+        if (json.catalog_page <= 0 || json.user_id <= 0) {
+            return;
+        }
 
-            if ((page instanceof RoomBundleLayout)) {
-                if (habbo != null) {
-                    ((RoomBundleLayout) page).buyRoom(habbo);
-                } else {
-                    HabboInfo info = HabboManager.getOfflineHabboInfo(json.user_id);
+        CatalogPage page = Emulator.getGameEnvironment().getCatalogManager().getCatalogPage(json.catalog_page);
+        if ((page instanceof RoomBundleLayout) == false) {
+            return;
+        }
 
-                    if (info != null) {
-                        ((RoomBundleLayout) page).buyRoom(null, json.user_id, info.getUsername());
-                    }
-                }
-            }
+        Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
+        if (habbo != null) {
+            ((RoomBundleLayout) page).buyRoom(habbo);
+            return;
+        }
+        
+        HabboInfo info = HabboManager.getOfflineHabboInfo(json.user_id);
+        if (info != null) {
+            ((RoomBundleLayout) page).buyRoom(null, json.user_id, info.getUsername());
         }
     }
 
     static class JSON {
-
         public int user_id;
-
-
         public int catalog_page;
     }
 }

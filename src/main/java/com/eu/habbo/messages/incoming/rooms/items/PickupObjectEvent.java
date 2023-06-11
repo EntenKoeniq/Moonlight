@@ -9,7 +9,7 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 public class PickupObjectEvent extends MessageHandler {
     @Override
     public void handle() {
-        int category = this.packet.readInt(); //10 = floorItem and 20 = wallItem
+        this.packet.readInt(); //10 = floorItem and 20 = wallItem
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();

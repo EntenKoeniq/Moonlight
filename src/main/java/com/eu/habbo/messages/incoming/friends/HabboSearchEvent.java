@@ -33,7 +33,7 @@ public class HabboSearchEvent extends MessageHandler {
                 cachedResults.put(username, buddies);
             }
 
-            this.client.sendResponse(new HabboSearchResultComposer(buddies, this.client.getHabbo().getMessenger().getFriends(username), this.client.getHabbo()));
+            this.client.sendResponse(new HabboSearchResultComposer(buddies, this.client.getHabbo().getMessenger().getFriends(username)));
         }
     }
 }

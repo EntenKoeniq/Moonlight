@@ -26,5 +26,4 @@ public class WiredMatchFurniSetting {
     public String toString(boolean includeState) {
         return this.item_id + "-" + (this.state.isEmpty() || !includeState ? " " : this.state) + "-" + this.rotation + "-" + this.x + "-" + this.y;
     }
-
 }

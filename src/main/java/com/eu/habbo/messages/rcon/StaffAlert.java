@@ -14,7 +14,6 @@ public class StaffAlert extends RCONMessage<StaffAlert.JSON> {
     }
 
     static class JSON {
-
         public String message;
     }
 }

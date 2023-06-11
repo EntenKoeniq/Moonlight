@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 @Slf4j
 public class SendGift extends RCONMessage<SendGift.SendGiftJSON> {
-
     public SendGift() {
         super(SendGiftJSON.class);
     }
@@ -42,9 +41,7 @@ public class SendGift extends RCONMessage<SendGift.SendGiftJSON> {
         }
 
         boolean userFound;
-        Habbo habbo;
-
-        habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
+        Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
 
         userFound = habbo != null;
         String username = "";
@@ -86,13 +83,8 @@ public class SendGift extends RCONMessage<SendGift.SendGiftJSON> {
     }
 
     static class SendGiftJSON {
-
         public int user_id = -1;
-
-
         public int itemid = -1;
-
-
         public String message = "";
     }
 }

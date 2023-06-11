@@ -6,14 +6,12 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
 
 public class CfhCategory {
-    private final int id;
     @Getter
     private final String name;
     @Getter
     private final TIntObjectMap<CfhTopic> topics;
 
-    public CfhCategory(int id, String name) {
-        this.id = id;
+    public CfhCategory(String name) {
         this.name = name;
         this.topics = TCollections.synchronizedMap(new TIntObjectHashMap<>());
     }

@@ -9,7 +9,6 @@ import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.rooms.items.youtube.YoutubeDisplayVideoMessageComposer;
-import com.eu.habbo.threading.runnables.YoutubeAdvanceVideo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +20,7 @@ public class InteractionYoutubeTV extends HabboItem {
     public int startedWatchingAt = 0;
     public int offset = 0;
     public boolean playing = true;
-    public ScheduledFuture autoAdvance = null;
+    public ScheduledFuture<?> autoAdvance = null;
 
     public InteractionYoutubeTV(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);

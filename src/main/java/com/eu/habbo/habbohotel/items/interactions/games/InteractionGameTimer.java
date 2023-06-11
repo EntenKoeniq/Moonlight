@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 @Slf4j
-public class InteractionGameTimer extends HabboItem implements Runnable {
+public class InteractionGameTimer extends HabboItem {
 
     private int[] TIMER_INTERVAL_STEPS = new int[] { 30, 60, 120, 180, 300, 600 };
 

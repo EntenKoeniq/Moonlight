@@ -13,15 +13,11 @@ import java.util.LinkedList;
 @Slf4j
 @AllArgsConstructor
 public class RoomUnitTeleport implements Runnable {
-
-    
     private final RoomUnit roomUnit;
     private final Room room;
     private final int x;
     private final int y;
     private final double z;
-
-    private final int newEffect;
 
     @Override
     public void run() {

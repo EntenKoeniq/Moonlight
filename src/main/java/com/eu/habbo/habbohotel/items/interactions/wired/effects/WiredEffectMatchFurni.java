@@ -109,7 +109,7 @@ public class WiredEffectMatchFurni extends InteractionWiredEffect implements Int
         else {
             String[] data = set.getString("wired_data").split(":");
 
-            int itemCount = Integer.parseInt(data[0]);
+            //int itemCount = Integer.parseInt(data[0]);
 
             String[] items = data[1].split(Pattern.quote(";"));
 

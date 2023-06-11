@@ -15,31 +15,33 @@ public class FriendRequest extends RCONMessage<FriendRequest.JSON> {
 
     @Override
     public void handle(Gson gson, JSON json) {
-        if (!Messenger.friendRequested(json.user_id, json.target_id)) {
-            Messenger.makeFriendRequest(json.user_id, json.target_id);
+        if (Messenger.friendRequested(json.user_id, json.target_id)) {
+            return;
+        }
 
-            Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.target_id);
-            if (target != null) {
-                Habbo from = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
+        Messenger.makeFriendRequest(json.user_id, json.target_id);
 
-                if (from != null) {
-                    target.getClient().sendResponse(new NewFriendRequestComposer(from.getHabboInfo()));
-                } else {
-                    final HabboInfo info = HabboManager.getOfflineHabboInfo(json.user_id);
+        Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.target_id);
+        if (target == null) {
+            return;
+        }
 
-                    if (info != null) {
-                        target.getClient().sendResponse(new NewFriendRequestComposer(info));
-                    }
-                }
-            }
+        Habbo from = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
+
+        if (from != null) {
+            target.getClient().sendResponse(new NewFriendRequestComposer(from.getHabboInfo()));
+            return;
+        }
+        
+        final HabboInfo info = HabboManager.getOfflineHabboInfo(json.user_id);
+
+        if (info != null) {
+            target.getClient().sendResponse(new NewFriendRequestComposer(info));
         }
     }
 
     static class JSON {
-
         public int user_id;
-
-
         public int target_id;
     }
 }

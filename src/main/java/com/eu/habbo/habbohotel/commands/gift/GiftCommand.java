@@ -1,7 +1,6 @@
 package com.eu.habbo.habbohotel.commands.gift;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.commands.Command;
 import com.eu.habbo.habbohotel.gameclients.GameClient;
 import com.eu.habbo.habbohotel.items.Item;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;

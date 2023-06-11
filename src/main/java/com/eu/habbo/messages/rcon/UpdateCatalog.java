@@ -6,7 +6,6 @@ import com.eu.habbo.messages.outgoing.catalog.marketplace.MarketplaceConfigurati
 import com.google.gson.Gson;
 
 public class UpdateCatalog extends RCONMessage<UpdateCatalog.JSONUpdateCatalog> {
-
     public UpdateCatalog() {
         super(JSONUpdateCatalog.class);
     }

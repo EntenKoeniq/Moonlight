@@ -11,7 +11,6 @@ public class WiredGiveRewardItem {
     private final String data;
     private final int probability;
 
-
     public WiredGiveRewardItem(String dataString) {
         String[] data = dataString.split(",");
 

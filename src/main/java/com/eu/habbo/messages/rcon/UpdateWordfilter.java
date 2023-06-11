@@ -4,7 +4,6 @@ import com.eu.habbo.Emulator;
 import com.google.gson.Gson;
 
 public class UpdateWordfilter extends RCONMessage<UpdateWordfilter.WordFilterJSON> {
-
     public UpdateWordfilter() {
         super(WordFilterJSON.class);
     }

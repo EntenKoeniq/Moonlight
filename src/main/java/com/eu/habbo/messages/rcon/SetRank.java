@@ -1,11 +1,9 @@
 package com.eu.habbo.messages.rcon;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.users.Habbo;
 import com.google.gson.Gson;
 
 public class SetRank extends RCONMessage<SetRank.JSONSetRank> {
-
     public SetRank() {
         super(JSONSetRank.class);
     }
@@ -20,20 +18,11 @@ public class SetRank extends RCONMessage<SetRank.JSONSetRank> {
             return;
         }
 
-        this.message = "updated offline user";
-
-        Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(object.user_id);
-
-        if (habbo != null) {
-            this.message = "updated online user";
-        }
+        this.message = (Emulator.getGameEnvironment().getHabboManager().getHabbo(object.user_id) != null) ? "updated online user" : "updated offline user";
     }
 
     static class JSONSetRank {
-
         public int user_id;
-
-
         public int rank;
     }
 }

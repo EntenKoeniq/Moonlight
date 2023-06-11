@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import java.util.Map;
 
 public class HotelAlert extends RCONMessage<HotelAlert.JSONHotelAlert> {
-
     public HotelAlert() {
         super(JSONHotelAlert.class);
     }
@@ -27,8 +26,9 @@ public class HotelAlert extends RCONMessage<HotelAlert.JSONHotelAlert> {
         if (serverMessage != null) {
             for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
                 Habbo habbo = set.getValue();
-                if (habbo.getHabboStats().isBlockStaffAlerts())
+                if (habbo.getHabboStats().isBlockStaffAlerts()) {
                     continue;
+                }
 
                 habbo.getClient().sendResponse(serverMessage);
             }
@@ -36,10 +36,7 @@ public class HotelAlert extends RCONMessage<HotelAlert.JSONHotelAlert> {
     }
 
     static class JSONHotelAlert {
-
         public String message;
-
-
         public String url = "";
     }
 }

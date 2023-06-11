@@ -21,7 +21,7 @@ public class MakeOfferEvent extends MessageHandler {
 
         int credits = this.packet.readInt();
 
-        int unknown = this.packet.readInt();
+        this.packet.readInt();
         int itemId = this.packet.readInt();
 
         HabboItem item = this.client.getHabbo().getInventory().getItemsComponent().getHabboItem(itemId);

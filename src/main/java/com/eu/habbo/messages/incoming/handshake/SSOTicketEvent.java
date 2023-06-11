@@ -133,10 +133,10 @@ public class SSOTicketEvent extends MessageHandler {
                 else if (!this.client.getHabbo().getHabboStats().isNux() || Emulator.getConfig().getBoolean("retro.style.homeroom") && RoomManager.HOME_ROOM_ID > 0)
                     roomIdToEnter = RoomManager.HOME_ROOM_ID;
 
-                boolean calendar = false;
+                //boolean calendar = false;
                 if (!this.client.getHabbo().getHabboStats().getAchievementProgress().containsKey(Emulator.getGameEnvironment().getAchievementManager().getAchievement("Login"))) {
                     AchievementManager.progressAchievement(this.client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().getAchievement("Login"));
-                    calendar = true;
+                    //calendar = true;
                 } else {
                     int previousOnline = (int) this.client.getHabbo().getHabboStats().getCache().get("previousOnline");
                     long daysBetween = ChronoUnit.DAYS.between(new Date((long) previousOnline * 1000L).toInstant(), new Date().toInstant());
@@ -153,9 +153,9 @@ public class SSOTicketEvent extends MessageHandler {
                             AchievementManager.progressAchievement(this.client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().getAchievement("Login"));
                         }
                         this.client.getHabbo().getHabboStats().setLoginStreak(client.getHabbo().getHabboStats().getLoginStreak()+1);
-                        calendar = true;
+                        //calendar = true;
                     } else if (daysBetween >= 1) {
-                        calendar = true;
+                        //calendar = true;
                     } else {
                         if (((lastLogin.getTime() / 1000) - Emulator.getIntUnixTimestamp()) > 86400) {
                             this.client.getHabbo().getHabboStats().setLoginStreak(0);

@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class HabboGiveHandItemToHabbo implements Runnable {
-    private final Habbo target;
     private final Habbo from;
+    private final Habbo target;
 
     @Override
     public void run() {

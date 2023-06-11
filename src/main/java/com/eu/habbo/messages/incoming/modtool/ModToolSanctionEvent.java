@@ -11,7 +11,7 @@ public class ModToolSanctionEvent extends MessageHandler {
     public void handle() {
         if (this.client.getHabbo().hasPermission(Permission.ACC_SUPPORTTOOL)) {
             int ticketId = this.packet.readInt();
-            int unknownInt = this.packet.readInt();
+            this.packet.readInt();
             int categoryId = this.packet.readInt();
 
             ModToolIssue issue = Emulator.getGameEnvironment().getModToolManager().getTicket(ticketId);

@@ -55,11 +55,16 @@ public class InteractionVendingMachine extends HabboItem {
 
         boolean inActivatorSpace = false;
 
-        for(RoomTile ignored : activatorTiles) {
+        for (int i = 0; i < activatorTiles.size(); i++) {
             if(unit.getCurrentLocation().is(unit.getX(), unit.getY())) {
                 inActivatorSpace = true;
             }
         }
+        //for(RoomTile _ : activatorTiles) {
+        //    if(unit.getCurrentLocation().is(unit.getX(), unit.getY())) {
+        //        inActivatorSpace = true;
+        //    }
+        //}
 
         if(inActivatorSpace) {
             useVendingMachine(client, room, unit);

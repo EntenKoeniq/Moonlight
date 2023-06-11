@@ -1,7 +1,6 @@
 package com.eu.habbo.messages.outgoing.friends;
 
 import com.eu.habbo.habbohotel.messenger.MessengerBuddy;
-import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
@@ -16,10 +15,8 @@ import java.util.List;
 public class HabboSearchResultComposer extends MessageComposer {
     private final THashSet<MessengerBuddy> users;
     private final THashSet<MessengerBuddy> friends;
-    private final Habbo habbo;
 
     private static final Comparator<MessengerBuddy> COMPARATOR = Comparator.comparing((MessengerBuddy b) -> b.getUsername().length()).thenComparing((MessengerBuddy b, MessengerBuddy b2) -> b.getUsername().compareToIgnoreCase(b2.getUsername()));
-
 
     @Override
     protected ServerMessage composeInternal() {

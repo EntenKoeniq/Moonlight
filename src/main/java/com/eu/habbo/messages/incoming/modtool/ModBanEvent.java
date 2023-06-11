@@ -27,7 +27,7 @@ public class ModBanEvent extends MessageHandler {
         String message = this.packet.readString();
         int cfhTopic = this.packet.readInt();
         int banType = this.packet.readInt();
-        boolean unknown = this.packet.readBoolean();
+        this.packet.readBoolean();
 
         int duration = switch (banType) {
             case BAN_18_HOURS -> 18 * 60 * 60;

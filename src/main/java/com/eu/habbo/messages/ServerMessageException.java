@@ -1,7 +1,6 @@
 package com.eu.habbo.messages;
 
 public class ServerMessageException extends RuntimeException {
-
     public ServerMessageException() {
     }
 
@@ -16,5 +15,4 @@ public class ServerMessageException extends RuntimeException {
     public ServerMessageException(Throwable cause) {
         super(cause);
     }
-
 }

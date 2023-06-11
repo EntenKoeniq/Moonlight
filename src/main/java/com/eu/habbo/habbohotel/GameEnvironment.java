@@ -122,5 +122,4 @@ public class GameEnvironment {
         this.calendarManager.dispose();
         log.info("GameEnvironment -> Disposed!");
     }
-
 }

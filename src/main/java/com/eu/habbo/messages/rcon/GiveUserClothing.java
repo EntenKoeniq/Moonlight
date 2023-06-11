@@ -35,7 +35,6 @@ public class GiveUserClothing extends RCONMessage<GiveUserClothing.JSONGiveUserC
 
         if (habbo != null) {
             GameClient client = habbo.getClient();
-
             if (client != null) {
                 habbo.getInventory().getWardrobeComponent().getClothing().add(object.clothing_id);
                 client.sendResponse(new FigureSetIdsComposer(habbo));

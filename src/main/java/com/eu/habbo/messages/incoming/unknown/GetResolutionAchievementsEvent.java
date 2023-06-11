@@ -6,7 +6,7 @@ import com.eu.habbo.messages.outgoing.events.resolution.AchievementResolutionsMe
 public class GetResolutionAchievementsEvent extends MessageHandler {
     @Override
     public void handle() {
-        int itemId = this.packet.readInt();
+        this.packet.readInt();
         int viewAll = this.packet.readInt();
 
         if (viewAll == 0) {

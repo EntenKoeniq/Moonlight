@@ -1,13 +1,10 @@
 package com.eu.habbo;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.ConsoleAppender;
 import com.eu.habbo.core.*;
 import com.eu.habbo.core.consolecommands.ConsoleCommand;
 import com.eu.habbo.database.Database;
 import com.eu.habbo.habbohotel.GameEnvironment;
-import com.eu.habbo.networking.camera.CameraClient;
 import com.eu.habbo.networking.gameserver.GameServer;
 import com.eu.habbo.networking.rconserver.RCONServer;
 import com.eu.habbo.plugin.PluginManager;
@@ -32,32 +29,25 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public final class Emulator {
-
-    public static final int MAJOR = 4;
+    public static final int MAJOR = 1;
     public static final int MINOR = 0;
     public static final int REVISION = 0;
-    public static final String PREVIEW = "Developer Preview";
-    public static final String VERSION = "Arcturus Morningstar" + " " + MAJOR + "." + MINOR + "." + REVISION + " " + PREVIEW;
+    public static final String VERSION = "Moonlight " + MAJOR + "." + MINOR + "." + REVISION;
     public static String build = "";
     public static boolean isReady = false;
     public static boolean isShuttingDown = false;
     public static boolean stopped = false;
     public static boolean debugging = false;
-    private static final String OS_NAME = (System.getProperty("os.name") != null ? System.getProperty("os.name") : "Unknown");
-    private static final String CLASS_PATH = (System.getProperty("java.class.path") != null ? System.getProperty("java.class.path") : "Unknown");
 
     private static final String logo =
-            """
-
-                    ███╗   ███╗ ██████╗ ██████╗ ███╗   ██╗██╗███╗   ██╗ ██████╗ ███████╗████████╗ █████╗ ██████╗\s
-                    ████╗ ████║██╔═══██╗██╔══██╗████╗  ██║██║████╗  ██║██╔════╝ ██╔════╝╚══██╔══╝██╔══██╗██╔══██╗
-                    ██╔████╔██║██║   ██║██████╔╝██╔██╗ ██║██║██╔██╗ ██║██║  ███╗███████╗   ██║   ███████║██████╔╝
-                    ██║╚██╔╝██║██║   ██║██╔══██╗██║╚██╗██║██║██║╚██╗██║██║   ██║╚════██║   ██║   ██╔══██║██╔══██╗
-                    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚████║██║██║ ╚████║╚██████╔╝███████║   ██║   ██║  ██║██║  ██║
-                    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
-                    """;
-
-
+        """
+        ███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗██╗     ██╗ ██████╗ ██╗  ██╗████████╗
+        ████╗ ████║██╔═══██╗██╔═══██╗████╗  ██║██║     ██║██╔════╝ ██║  ██║╚══██╔══╝
+        ██╔████╔██║██║   ██║██║   ██║██╔██╗ ██║██║     ██║██║  ███╗███████║   ██║   
+        ██║╚██╔╝██║██║   ██║██║   ██║██║╚██╗██║██║     ██║██║   ██║██╔══██║   ██║   
+        ██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║███████╗██║╚██████╔╝██║  ██║   ██║   
+        ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+        """;
 
     private static int timeStarted = 0;
     private static Runtime runtime;
@@ -66,7 +56,6 @@ public final class Emulator {
     private static TextsManager texts;
     private static GameServer gameServer;
     private static RCONServer rconServer;
-    private static CameraClient cameraClient;
     private static Database database;
     private static DatabaseLogger databaseLogger;
     private static ThreadPooling threading;
@@ -84,68 +73,36 @@ public final class Emulator {
         Runtime.getRuntime().addShutdownHook(hook);
     }
 
-    public static void promptEnterKey(){
-        log.info("\n");
-        log.info("This is a developer preview build. Your plugins for Arcturus Morningstar 3.x will NOT work on this build.");
-        log.info("Press \"ENTER\" if you agree to the terms stated above...");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-    }
-
     public static void main(String[] args) {
+        long startTime = System.currentTimeMillis();
+
+        Locale.setDefault(Locale.ENGLISH);
+        setBuild();
+        Emulator.stopped = false;
+
+        System.out.println(logo);
+
         try {
-            // Check if running on Windows and not in IntelliJ.
-            // If so, we need to reconfigure the console appender and enable Jansi for colors.
-            if (OS_NAME.startsWith("Windows") && !CLASS_PATH.contains("idea_rt.jar")) {
-                ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-                ConsoleAppender<ILoggingEvent> appender = (ConsoleAppender<ILoggingEvent>) root.getAppender("Console");
-
-                appender.stop();
-                appender.setWithJansi(true);
-                appender.start();
-            }
-
-            Locale.setDefault(new Locale("en"));
-            setBuild();
-            Emulator.stopped = false;
-            ConsoleCommand.load();
-
-            System.out.println(logo);
-
-            // Checks if this is a BETA build before allowing them to continue.
-            if (PREVIEW.toLowerCase().contains("preview") ) {
-                System.out.println();
-                promptEnterKey();
-            }
-            log.info("eek. Has it really been a year?");
-            log.info("This project is for educational purposes only. This Emulator is an open-source fork of Arcturus created by TheGeneral.");
-            log.info("Version: {}", VERSION);
-            log.info("Build: {}", build);
-            log.info("Follow our development at https://git.krews.org/morningstar/Arcturus-Community");
-
-            long startTime = System.nanoTime();
-
             Emulator.runtime = Runtime.getRuntime();
             Emulator.config = new ConfigurationManager("config.ini");
             Emulator.crypto = new CryptoConfig(
-                    Emulator.getConfig().getBoolean("enc.enabled", false),
-                    Emulator.getConfig().getValue("enc.e"),
-                    Emulator.getConfig().getValue("enc.n"),
-                    Emulator.getConfig().getValue("enc.d"));
+                Emulator.getConfig().getBoolean("enc.enabled", false),
+                Emulator.getConfig().getValue("enc.e"),
+                Emulator.getConfig().getValue("enc.n"),
+                Emulator.getConfig().getValue("enc.d")
+              );
             Emulator.database = new Database(Emulator.getConfig());
             Emulator.databaseLogger = new DatabaseLogger();
             Emulator.config.loaded = true;
             Emulator.config.loadFromDatabase();
             Emulator.threading = new ThreadPooling(Emulator.getConfig().getInt("runtime.threads"));
-            Emulator.getDatabase().getDataSource().setMaximumPoolSize(Emulator.getConfig().getInt("runtime.threads") * 2);
-            Emulator.getDatabase().getDataSource().setMinimumIdle(10);
             Emulator.pluginManager = new PluginManager();
             Emulator.pluginManager.reload();
             Emulator.getPluginManager().fireEvent(new EmulatorConfigUpdatedEvent());
             Emulator.texts = new TextsManager();
             new CleanerThread();
-            Emulator.gameServer = new GameServer(getConfig().getValue("game.host", "127.0.0.1"), getConfig().getInt("game.port", 30000));
-            Emulator.rconServer = new RCONServer(getConfig().getValue("rcon.host", "127.0.0.1"), getConfig().getInt("rcon.port", 30001));
+            Emulator.gameServer = new GameServer(getConfig().getValue("ws.nitro.host"), getConfig().getInt("ws.nitro.port"));
+            Emulator.rconServer = new RCONServer(getConfig().getValue("rcon.host"), getConfig().getInt("rcon.port"));
             Emulator.gameEnvironment = new GameEnvironment();
             Emulator.gameEnvironment.load();
             Emulator.gameServer.initializePipeline();
@@ -154,8 +111,8 @@ public final class Emulator {
             Emulator.rconServer.connect();
             Emulator.badgeImager = new BadgeImager();
 
-            log.info("Arcturus Morningstar has successfully loaded.");
-            log.info("System launched in: {}ms. Using {} threads!", (System.nanoTime() - startTime) / 1e6, Runtime.getRuntime().availableProcessors() * 2);
+            log.info("Moonlight has successfully loaded.");
+            log.info("System launched in: {}ms. Using {} threads!", System.currentTimeMillis() - startTime, Runtime.getRuntime().availableProcessors());
             log.info("Memory: {}/{}MB", (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024), (runtime.freeMemory()) / (1024 * 1024));
 
             Emulator.debugging = Emulator.getConfig().getBoolean("debug.mode");
@@ -167,47 +124,46 @@ public final class Emulator {
             }
 
             Emulator.getPluginManager().fireEvent(new EmulatorLoadedEvent());
-            Emulator.isReady = true;
-            Emulator.timeStarted = getIntUnixTimestamp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            if (Emulator.getConfig().getInt("runtime.threads") < (Runtime.getRuntime().availableProcessors() * 2)) {
-                log.warn("Emulator settings runtime.threads ({}) can be increased to ({}) to possibly increase performance.",
-                        Emulator.getConfig().getInt("runtime.threads"),
-                        Runtime.getRuntime().availableProcessors() * 2);
-            }
+        Emulator.isReady = true;
+        Emulator.timeStarted = getIntUnixTimestamp();
 
-            Emulator.getThreading().run(() -> {
-            }, 1500);
+        if (Emulator.getConfig().getInt("runtime.threads") < (Runtime.getRuntime().availableProcessors())) {
+            log.warn(
+                "Emulator settings runtime.threads ({}) can be increased to ({}) to possibly increase performance.",
+                Emulator.getConfig().getInt("runtime.threads"),
+                Runtime.getRuntime().availableProcessors()
+            );
+        }
 
-            // Check if console mode is true or false, default is true
-            if (Emulator.getConfig().getBoolean("console.mode", true)) {
+        // Check if console mode is true or false, default is true
+        if (Emulator.getConfig().getBoolean("console.mode", true)) {
+            ConsoleCommand.load();
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            while (!isShuttingDown && isReady) {
+                try {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                    String line = reader.readLine();
 
-                while (!isShuttingDown && isReady) {
-                    try {
-                        String line = reader.readLine();
-
-                        if (line != null) {
-                            ConsoleCommand.handle(line);
-                        }
-                        System.out.println("Waiting for command: ");
-                    } catch (Exception e) {
-                        if (!(e instanceof IOException && e.getMessage().equals("Bad file descriptor"))) {
-                            log.error("Error while reading command", e);
-                        }
+                    if (line != null) {
+                        ConsoleCommand.handle(line);
+                    }
+                    System.out.println("Waiting for command: ");
+                } catch (Exception e) {
+                    if (!(e instanceof IOException && e.getMessage().equals("Bad file descriptor"))) {
+                        log.error("Error while reading command", e);
                     }
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
     private static void setBuild() {
         if (Emulator.class.getProtectionDomain().getCodeSource() == null) {
-            build = "4.0 Developer Preview Branch";
+            build = "?.? Developer Preview Branch";
             return;
         }
 
@@ -218,13 +174,16 @@ public final class Emulator {
             try(FileInputStream fis = new FileInputStream(filepath)) {
                 byte[] dataBytes = new byte[1024];
                 int nread;
-                while ((nread = fis.read(dataBytes)) != -1)
+                while ((nread = fis.read(dataBytes)) != -1) {
                     md.update(dataBytes, 0, nread);
+                }
                 byte[] mdbytes = md.digest();
-                for (byte mdbyte : mdbytes) sb.append(Integer.toString((mdbyte & 0xff) + 0x100, 16).substring(1));
+                for (byte mdbyte : mdbytes) {
+                    sb.append(Integer.toString((mdbyte & 0xff) + 0x100, 16).substring(1));
+                }
             }
         } catch (Exception e) {
-            build = "4.0 Developer Preview Branch";
+            build = "?.? Developer Preview Branch";
             return;
         }
 
@@ -236,17 +195,11 @@ public final class Emulator {
         Emulator.isShuttingDown = true;
         Emulator.isReady = false;
 
-        log.info("Stopping Arcturus Morningstar {}", VERSION);
+        log.info("Stopping Moonlight {}", VERSION);
 
         try {
             if (Emulator.getPluginManager() != null)
                 Emulator.getPluginManager().fireEvent(new EmulatorStartShutdownEvent());
-        } catch (Exception ignored) {
-        }
-
-        try {
-            if (Emulator.cameraClient != null)
-                Emulator.cameraClient.disconnect();
         } catch (Exception ignored) {
         }
 
@@ -275,9 +228,8 @@ public final class Emulator {
         }
 
         try {
-            if (Emulator.config != null) {
+            if (Emulator.config != null)
                 Emulator.config.saveToDatabase();
-            }
         } catch (Exception ignored) {
         }
 
@@ -287,7 +239,7 @@ public final class Emulator {
         } catch (Exception ignored) {
         }
 
-        log.info("Stopped Arcturus Morningstar {}", VERSION);
+        log.info("Stopped Moonlight {}", VERSION);
 
         if (Emulator.database != null) {
             Emulator.getDatabase().dispose();
@@ -296,7 +248,6 @@ public final class Emulator {
 
         try {
             if (Emulator.threading != null)
-
                 Emulator.threading.shutDown();
         } catch (Exception ignored) {
         }
@@ -334,7 +285,6 @@ public final class Emulator {
         return rconServer;
     }
 
-
     public static ThreadPooling getThreading() {
         return threading;
     }
@@ -353,14 +303,6 @@ public final class Emulator {
 
     public static BadgeImager getBadgeImager() {
         return badgeImager;
-    }
-
-    public static synchronized CameraClient getCameraClient() {
-        return cameraClient;
-    }
-
-    public static synchronized void setCameraClient(CameraClient client) {
-        cameraClient = client;
     }
 
     public static int getTimeStarted() {
@@ -401,7 +343,6 @@ public final class Emulator {
     }
 
     public static Date modifyDate(Date date, String timeString) {
-
         Calendar c = Calendar.getInstance();
         c.setTime(date);
 
@@ -466,8 +407,7 @@ public final class Emulator {
         return (int) (System.currentTimeMillis() / 1000);
     }
 
-    public static boolean isNumeric(String string)
-            throws IllegalArgumentException {
+    public static boolean isNumeric(String string) throws IllegalArgumentException {
         boolean isnumeric = false;
         if ((string != null) && (!string.equals(""))) {
             isnumeric = true;

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Slf4j
 public class GameServerMessageLogger extends MessageToMessageEncoder<ServerMessage> {
-
     private final PacketNames names;
 
     public GameServerMessageLogger()  {
@@ -21,12 +20,15 @@ public class GameServerMessageLogger extends MessageToMessageEncoder<ServerMessa
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ServerMessage message, List<Object> out) {
-        log.debug(String.format("[" + ANSI.BLUE + "SERVER" + ANSI.DEFAULT + "][%-4d][%-41s] => %s",
+        log.debug(
+            String.format(
+                "[" + ANSI.BLUE + "SERVER" + ANSI.DEFAULT + "][%-4d][%-41s] => %s",
                 message.getHeader(),
                 this.names.getOutgoingName(message.getHeader()),
-                message.getBodyString()));
+                message.getBodyString()
+            )
+        );
 
         out.add(message);
     }
-
 }

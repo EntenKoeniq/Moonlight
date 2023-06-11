@@ -6,7 +6,6 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.RoomForwardMessageComposer;
 import com.eu.habbo.messages.outgoing.users.NavigatorSettingsComposer;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

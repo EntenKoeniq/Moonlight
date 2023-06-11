@@ -25,27 +25,24 @@ public class ClientMessage {
         try {
             return this.buffer.readShort();
         } catch (Exception ignored) {
+            return 0;
         }
-
-        return 0;
     }
 
     public Integer readInt() {
         try {
             return this.buffer.readInt();
         } catch (Exception ignored) {
+            return 0;
         }
-
-        return 0;
     }
 
     public boolean readBoolean() {
         try {
             return this.buffer.readByte() == 1;
         } catch (Exception ignored) {
+            return false;
         }
-
-        return false;
     }
 
     public String readString() {

@@ -12,7 +12,6 @@ import java.sql.SQLException;
 
 @Slf4j
 public class ChangeUsername extends RCONMessage<ChangeUsername.JSON> {
-
     public ChangeUsername() {
         super(ChangeUsername.JSON.class);
     }
@@ -30,9 +29,10 @@ public class ChangeUsername extends RCONMessage<ChangeUsername.JSON> {
 
             Habbo habbo = Emulator.getGameServer().getGameClientManager().getHabbo(json.user_id);
             if (habbo != null) {
-                if (json.canChange)
+                if (json.canChange) {
                     habbo.alert(Emulator.getTexts().getValue("rcon.alert.user.change_username"));
-
+                }
+    
                 habbo.getHabboStats().setAllowNameChange(json.canChange);
                 habbo.getClient().sendResponse(new UserObjectComposer(habbo));
             } else {
@@ -64,7 +64,6 @@ public class ChangeUsername extends RCONMessage<ChangeUsername.JSON> {
 
     static class JSON {
         public int user_id;
-
         public boolean canChange;
     }
 }

@@ -21,25 +21,29 @@ public class PublishPhotoEvent extends MessageHandler {
     @Override
     public void handle() {
         Habbo habbo = this.client.getHabbo();
-
-        if (habbo == null) return;
-        if (habbo.getHabboInfo().getPhotoTimestamp() == 0) return;
-        if (habbo.getHabboInfo().getPhotoJSON().isEmpty()) return;
-        if (!habbo.getHabboInfo().getPhotoJSON().contains(habbo.getHabboInfo().getPhotoTimestamp() + "")) return;
-
+        if (habbo == null)
+            return;
+        if (habbo.getHabboInfo().getPhotoTimestamp() == 0)
+            return;
+        if (habbo.getHabboInfo().getPhotoJSON().isEmpty())
+            return;
+        if (!habbo.getHabboInfo().getPhotoJSON().contains(Integer.toString(habbo.getHabboInfo().getPhotoTimestamp())))
+            return;
         if (habbo.getHabboInfo().getCurrencyAmount(PublishPhotoEvent.CAMERA_PUBLISH_POINTS_TYPE) < PublishPhotoEvent.CAMERA_PUBLISH_POINTS) {
             this.client.sendResponse(new NotEnoughBalanceMessageComposer(false, true, PublishPhotoEvent.CAMERA_PUBLISH_POINTS));
             return;
         }
 
         int timestamp = Emulator.getIntUnixTimestamp();
-
         boolean isOk = false;
         int cooldownLeft = Math.max(0, Emulator.getConfig().getInt("camera.publish.delay") - (timestamp - this.client.getHabbo().getHabboInfo().getWebPublishTimestamp()));
-
         if (cooldownLeft == 0) {
-            UserPublishPictureEvent publishPictureEvent = new UserPublishPictureEvent(this.client.getHabbo(), this.client.getHabbo().getHabboInfo().getPhotoURL(), timestamp, this.client.getHabbo().getHabboInfo().getPhotoRoomId());
-
+            UserPublishPictureEvent publishPictureEvent = new UserPublishPictureEvent(
+                this.client.getHabbo(),
+                this.client.getHabbo().getHabboInfo().getPhotoURL(),
+                timestamp,
+                this.client.getHabbo().getHabboInfo().getPhotoRoomId()
+            );
             if (!Emulator.getPluginManager().fireEvent(publishPictureEvent).isCancelled()) {
                 try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); PreparedStatement statement = connection.prepareStatement("INSERT INTO camera_web (user_id, room_id, timestamp, url) VALUES (?, ?, ?, ?)")) {
                     statement.setInt(1, this.client.getHabbo().getHabboInfo().getId());

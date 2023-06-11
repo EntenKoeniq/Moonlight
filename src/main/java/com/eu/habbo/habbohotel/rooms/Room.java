@@ -64,7 +64,6 @@ import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.THashSet;
-import io.netty.util.internal.ConcurrentSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -132,7 +131,7 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
     private final TIntIntHashMap mutedHabbos;
     private final TIntObjectHashMap<RoomBan> bannedHabbos;
     @Getter
-    private final ConcurrentSet<Game> games;
+    private final Set<Game> games;
     @Getter
     private final TIntObjectMap<String> furniOwnerNames;
     @Getter
@@ -377,7 +376,7 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
         }
 
         this.mutedHabbos = new TIntIntHashMap();
-        this.games = new ConcurrentSet<>();
+        this.games = ConcurrentHashMap.newKeySet();
 
         this.activeTrades = new THashSet<>(0);
         this.rights = new TIntArrayList();
@@ -827,7 +826,8 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
 
         this.getBotsAt(this.layout.getTile(x, y)).forEach(bot -> {
             if (topItem != null) {
-                if (topItem.getBaseItem().allowSit()) {
+                /* EQ - START */
+                /*if (topItem.getBaseItem().allowSit()) {
                     bot.getRoomUnit().setZ(topItem.getZ());
                     bot.getRoomUnit().setPreviousLocationZ(topItem.getZ());
                     bot.getRoomUnit().setRotation(RoomUserRotation.fromValue(topItem.getRotation()));
@@ -837,7 +837,24 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
                     if (topItem.getBaseItem().allowLay()) {
                         bot.getRoomUnit().setStatus(RoomUnitStatus.LAY, (topItem.getZ() + topItem.getBaseItem().getHeight()) + "");
                     }
+                }*/
+
+                if (topItem.getBaseItem().allowSit()) {
+                    bot.getRoomUnit().setZ(topItem.getZ());
+                    bot.getRoomUnit().setPreviousLocationZ(topItem.getZ());
+                    bot.getRoomUnit().setRotation(RoomUserRotation.fromValue(topItem.getRotation()));
+                    bot.getRoomUnit().setStatus(RoomUnitStatus.SIT, Double.toString(topItem.getBaseItem().getHeight()));
+                } else {
+                    if (topItem.getBaseItem().allowLay()) {
+                        bot.getRoomUnit().setZ(topItem.getZ());
+                        bot.getRoomUnit().setPreviousLocationZ(topItem.getZ());
+                        bot.getRoomUnit().setRotation(RoomUserRotation.fromValue(topItem.getRotation()));
+                        bot.getRoomUnit().setStatus(RoomUnitStatus.LAY, Double.toString(topItem.getBaseItem().getHeight()));
+                    } else {
+                        bot.getRoomUnit().setZ(topItem.getZ() + Item.getCurrentHeight(topItem));
+                    }
                 }
+                /* EQ - END */
             } else {
                 bot.getRoomUnit().setZ(bot.getRoomUnit().getCurrentLocation().getStackHeight());
                 bot.getRoomUnit().setPreviousLocationZ(bot.getRoomUnit().getCurrentLocation().getStackHeight());
@@ -3609,18 +3626,20 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
         if (roomUnit == null || roomUnit.getRoom() == null) return;
 
         Habbo habbo = roomUnit.getRoom().getHabbo(roomUnit);
+        if (roomUnit.getRoomUnitType() == RoomUnitType.USER && (habbo == null || habbo.getHabboInfo().isInGame() && !ignoreChecks)) {
+            return;
+        }
+        
+        if (duration == -1 || duration == Integer.MAX_VALUE) {
+            duration = Integer.MAX_VALUE;
+        } else {
+            duration += Emulator.getIntUnixTimestamp();
+        }
 
-        if (roomUnit.getRoomUnitType() == RoomUnitType.USER && (habbo == null || habbo.getHabboInfo().isInGame() && !ignoreChecks)) { return; }
-            if (duration == -1 || duration == Integer.MAX_VALUE) {
-                duration = Integer.MAX_VALUE;
-            } else {
-                duration += Emulator.getIntUnixTimestamp();
-            }
-
-            if ((this.allowEffects || ignoreChecks) && !roomUnit.isSwimming()) {
-                roomUnit.setEffectId(effectId, duration);
-                this.sendComposer(new AvatarEffectMessageComposer(roomUnit).compose());
-            }
+        if ((this.allowEffects || ignoreChecks) && !roomUnit.isSwimming()) {
+            roomUnit.setEffectId(effectId, duration);
+            this.sendComposer(new AvatarEffectMessageComposer(roomUnit).compose());
+        }
     }
 
     public void giveHandItem(Habbo habbo, int handItem) {

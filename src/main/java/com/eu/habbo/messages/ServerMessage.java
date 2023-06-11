@@ -4,18 +4,14 @@ import com.eu.habbo.util.PacketUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 public class ServerMessage {
 
     private boolean initialized;
 
     private int header;
-    private AtomicInteger refs;
     private ByteBufOutputStream stream;
     private ByteBuf channelBuffer;
 
@@ -34,7 +30,6 @@ public class ServerMessage {
 
         this.initialized = true;
         this.header = id;
-        this.refs = new AtomicInteger(0);
         this.channelBuffer = Unpooled.buffer();
         this.stream = new ByteBufOutputStream(this.channelBuffer);
 

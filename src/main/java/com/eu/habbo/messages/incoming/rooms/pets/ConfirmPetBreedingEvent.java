@@ -10,8 +10,8 @@ public class ConfirmPetBreedingEvent extends MessageHandler {
     public void handle() {
         int itemId = this.packet.readInt();
         String name = this.packet.readString();
-        int petOneId = this.packet.readInt();
-        int petTwoId = this.packet.readInt();
+        this.packet.readInt();
+        this.packet.readInt();
 
         HabboItem item = this.client.getHabbo().getHabboInfo().getCurrentRoom().getHabboItem(itemId);
 

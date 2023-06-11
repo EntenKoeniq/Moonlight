@@ -9,7 +9,6 @@ import com.eu.habbo.messages.outgoing.navigator.GuestRoomSearchResultComposer;
 import com.eu.habbo.plugin.events.navigator.NavigatorSearchResultEvent;
 import gnu.trove.map.hash.THashMap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoomTextSearchEvent extends MessageHandler {

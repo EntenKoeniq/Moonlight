@@ -1,13 +1,7 @@
 package com.eu.habbo.habbohotel.commands.gift;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.commands.Command;
 import com.eu.habbo.habbohotel.gameclients.GameClient;
-import com.eu.habbo.habbohotel.items.Item;
-import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
-import com.eu.habbo.habbohotel.users.Habbo;
-import com.eu.habbo.habbohotel.users.HabboItem;
-import com.eu.habbo.messages.outgoing.inventory.FurniListInvalidateComposer;
 import com.eu.habbo.messages.outgoing.wired.WiredRewardResultMessageComposer;
 
 public class RoomGiftCommand extends BaseGiftCommand {
@@ -35,6 +29,4 @@ public class RoomGiftCommand extends BaseGiftCommand {
 
         return false;
     }
-
-
 }

@@ -10,7 +10,6 @@ import io.netty.util.CharsetUtil;
 import java.util.List;
 
 public class GamePolicyDecoder extends ByteToMessageDecoder {
-
     private static final String POLICY = "<?xml version=\"1.0\"?>\n" +
             "  <!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\n" +
             "  <cross-domain-policy>\n" +
@@ -25,7 +24,7 @@ public class GamePolicyDecoder extends ByteToMessageDecoder {
         if (b == '<') {
             in.resetReaderIndex();
             ctx.writeAndFlush(Unpooled.copiedBuffer(POLICY, CharsetUtil.UTF_8))
-                    .addListener(ChannelFutureListener.CLOSE);
+                .addListener(ChannelFutureListener.CLOSE);
             return;
         }
 

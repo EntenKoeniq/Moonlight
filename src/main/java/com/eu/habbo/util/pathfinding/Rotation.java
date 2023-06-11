@@ -1,25 +1,31 @@
 package com.eu.habbo.util.pathfinding;
 
 public class Rotation {
-    public static int Calculate(int X1, int Y1, int X2, int Y2) {
-        int Rotation = 0;
-        if ((X1 > X2) && (Y1 > Y2)) {
-            Rotation = 7;
-        } else if ((X1 < X2) && (Y1 < Y2)) {
-            Rotation = 3;
-        } else if ((X1 > X2) && (Y1 < Y2)) {
-            Rotation = 5;
-        } else if ((X1 < X2) && (Y1 > Y2)) {
-            Rotation = 1;
-        } else if (X1 > X2) {
-            Rotation = 6;
-        } else if (X1 < X2) {
-            Rotation = 2;
-        } else if (Y1 < Y2) {
-            Rotation = 4;
-        } else if (Y1 > Y2) {
-            Rotation = 0;
+    public static int Calculate(int x1, int y1, int x2, int y2) {
+        int rotation = 0;
+        if (x1 > x2) {
+            if (y1 > y2) {
+                rotation = 7;
+            } else if (y1 < y2) {
+                rotation = 5;
+            } else {
+                rotation = 6;
+            }
+        } else if (x1 < x2) {
+            if (y1 > y2) {
+                rotation = 1;
+            } else if (y1 < y2) {
+                rotation = 3;
+            } else {
+                rotation = 2;
+            }
+        } else {
+            if (y1 > y2) {
+                rotation = 0;
+            } else if (y1 < y2) {
+                rotation = 4;
+            }
         }
-        return Rotation;
+        return rotation;
     }
 }

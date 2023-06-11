@@ -12,7 +12,7 @@ public class CloseIssuesEvent extends MessageHandler {
     public void handle() {
         if (this.client.getHabbo().hasPermission(Permission.ACC_SUPPORTTOOL)) {
             int state = this.packet.readInt();
-            int something = this.packet.readInt();
+            this.packet.readInt();
             int ticketId = this.packet.readInt();
 
             ModToolIssue issue = Emulator.getGameEnvironment().getModToolManager().getTicket(ticketId);

@@ -54,25 +54,12 @@ public class ImageHotelAlert extends RCONMessage<ImageHotelAlert.JSON> {
     }
 
     static class JSON {
-
         public String bubble_key = "";
-
-
         public String message = "";
-
-
         public String url = "";
-
-
         public String url_message = "";
-
-
         public String title = "";
-
-
         public String display_type = "";
-
-
         public String image = "";
     }
 }

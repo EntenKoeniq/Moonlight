@@ -12,12 +12,8 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUnitOnRollerComposer;
 import com.eu.habbo.plugin.events.users.UserIdleEvent;
 import gnu.trove.set.hash.THashSet;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class MoveAvatarEvent extends MessageHandler {
-
-
     @Override
     public int getRatelimit() {
         return 500;

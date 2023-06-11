@@ -8,7 +8,6 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
 
 public class GameByteDecryption extends ByteToMessageDecoder {
-
     public GameByteDecryption() {
         setSingleDecode(true);
     }
@@ -24,5 +23,4 @@ public class GameByteDecryption extends ByteToMessageDecoder {
         // Continue in the pipeline.
         out.add(data);
     }
-
 }

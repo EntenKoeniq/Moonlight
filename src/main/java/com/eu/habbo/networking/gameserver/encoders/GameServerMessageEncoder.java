@@ -9,7 +9,6 @@ import io.netty.util.IllegalReferenceCountException;
 import java.io.IOException;
 
 public class GameServerMessageEncoder extends MessageToByteEncoder<ServerMessage> {
-
     @Override
     protected void encode(ChannelHandlerContext ctx, ServerMessage message, ByteBuf out) throws Exception {
         try {
@@ -25,5 +24,4 @@ public class GameServerMessageEncoder extends MessageToByteEncoder<ServerMessage
             throw new IOException(String.format("IllegalReferenceCountException happened for ServerMessage with packet id %d.", message.getHeader()), e);
         }
     }
-
 }

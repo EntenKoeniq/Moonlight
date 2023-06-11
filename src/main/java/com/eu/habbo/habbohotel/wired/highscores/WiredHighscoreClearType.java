@@ -12,6 +12,4 @@ public enum WiredHighscoreClearType {
     MONTHLY(3);
 
     private final int type;
-
-
 }

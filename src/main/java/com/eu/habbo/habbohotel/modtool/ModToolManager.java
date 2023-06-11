@@ -142,7 +142,7 @@ public class ModToolManager {
                 "LEFT JOIN support_cfh_categories ON support_cfh_categories.id = support_cfh_topics.category_id")) {
             while (set.next()) {
                 if (!this.cfhCategories.containsKey(set.getInt("support_cfh_category_id"))) {
-                    this.cfhCategories.put(set.getInt("support_cfh_category_id"), new CfhCategory(set.getInt("id"), set.getString("category_name_internal")));
+                    this.cfhCategories.put(set.getInt("support_cfh_category_id"), new CfhCategory(set.getString("category_name_internal")));
                 }
 
                 this.cfhCategories.get(set.getInt("support_cfh_category_id")).addTopic(new CfhTopic(set, this.getIssuePreset(set.getInt("default_sanction"))));

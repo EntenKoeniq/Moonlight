@@ -2,7 +2,6 @@ package com.eu.habbo.messages.outgoing.guilds;
 
 import com.eu.habbo.habbohotel.guilds.Guild;
 import com.eu.habbo.habbohotel.guilds.GuildMember;
-import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
@@ -16,7 +15,6 @@ import java.util.TimeZone;
 public class GuildMembersComposer extends MessageComposer {
     private final Guild guild;
     private final ArrayList<GuildMember> members;
-    private final Habbo session;
     private final int pageId;
     private final int level;
     private final String searchValue;

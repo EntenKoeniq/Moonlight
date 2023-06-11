@@ -11,7 +11,7 @@ public class AddJukeboxDiskEvent extends MessageHandler {
         if (!this.client.getHabbo().getHabboInfo().getCurrentRoom().hasRights(this.client.getHabbo())) return;
 
         int itemId = this.packet.readInt();
-        int slotId = this.packet.readInt();
+        this.packet.readInt();
 
         Habbo habbo = this.client.getHabbo();
 

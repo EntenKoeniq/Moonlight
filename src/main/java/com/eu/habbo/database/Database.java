@@ -22,23 +22,16 @@ public class Database {
     public Database(ConfigurationManager config) {
         long millis = System.currentTimeMillis();
 
-        boolean SQLException = false;
-
         try {
             this.databasePool = new DatabasePool();
             if (!this.databasePool.getStoragePooling(config)) {
                 log.info("Failed to connect to the database. Please check config.ini and make sure the MySQL process is running. Shutting down...");
-                SQLException = true;
                 return;
             }
             this.dataSource = this.databasePool.getDatabase();
         } catch (Exception e) {
-            SQLException = true;
             log.error("Failed to connect to your database.", e);
-        } finally {
-            if (SQLException) {
-                Emulator.prepareShutdown();
-            }
+            Emulator.prepareShutdown();
         }
 
         log.info("Database -> Connected! ({} MS)", System.currentTimeMillis() - millis);
@@ -1358,7 +1351,6 @@ public class Database {
 
         public static final String ID = "id";
         public static final String USERNAME = "username";
-        public static final String REAL_NAME = "real_name";
         public static final String PASSWORD = "password";
         public static final String MAIL = "mail";
         public static final String MAIL_VERIFIED = "mail_verified";
@@ -1381,7 +1373,6 @@ public class Database {
         public static final String HOME_ROOM = "home_room";
         public static final String SECRET_KEY = "secret_key";
         public static final String PINCODE = "pincode";
-        public static final String EXTRA_RANK = "extra_rank";
     }
 
     public static final class Users_Achievements {

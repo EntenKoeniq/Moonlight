@@ -17,6 +17,6 @@ public class SetNewNavigatorWindowPreferencesEvent extends MessageHandler {
         boolean openSearches = this.packet.readBoolean();
         windowSettings.setOpenSearches(openSearches);
 
-        int unknownVar = this.packet.readInt();
+        this.packet.readInt();
     }
 }

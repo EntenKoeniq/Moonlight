@@ -10,7 +10,7 @@ public class ModeratorActionEvent extends MessageHandler {
     @Override
     public void handle() {
         if (this.client.getHabbo().hasPermission(Permission.ACC_SUPPORTTOOL)) {
-            int type = this.packet.readInt();
+            this.packet.readInt();
 
             Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
             if (room != null) {

@@ -21,7 +21,7 @@ public class GetForumsListEvent extends MessageHandler {
     public void handle() {
         int mode = this.packet.readInt();
         int offset = this.packet.readInt();
-        int amount = this.packet.readInt();
+        this.packet.readInt();
 
         Set<Guild> guilds = switch (mode) {
             case 0 -> // most active

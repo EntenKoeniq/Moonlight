@@ -17,7 +17,6 @@ import com.eu.habbo.plugin.Event;
 import com.eu.habbo.plugin.events.users.achievements.UserAchievementLeveledEvent;
 import com.eu.habbo.plugin.events.users.achievements.UserAchievementProgressEvent;
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.procedure.TObjectIntProcedure;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;

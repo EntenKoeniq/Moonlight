@@ -13,7 +13,7 @@ public class SetRandomStateEvent extends MessageHandler {
     public void handle() {
         try {
             int itemId = this.packet.readInt();
-            int state = this.packet.readInt();
+            this.packet.readInt();
 
             Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 

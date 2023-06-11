@@ -2,15 +2,8 @@ package com.eu.habbo.messages.incoming.catalog;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.catalog.ClubOffer;
-import com.eu.habbo.habbohotel.permissions.Permission;
 import com.eu.habbo.habbohotel.users.subscriptions.Subscription;
 import com.eu.habbo.habbohotel.users.subscriptions.SubscriptionHabboClub;
-import com.eu.habbo.messages.incoming.MessageHandler;
-import com.eu.habbo.messages.outgoing.catalog.PurchaseErrorMessageComposer;
-import com.eu.habbo.messages.outgoing.catalog.PurchaseOKMessageComposer;
-import com.eu.habbo.messages.outgoing.inventory.FurniListInvalidateComposer;
-import com.eu.habbo.messages.outgoing.users.ActivityPointsMessageComposer;
-import com.eu.habbo.messages.outgoing.users.CreditBalanceComposer;
 
 public class PurchaseVipMembershipExtensionEvent extends PurchaseEvent {
     @Override
@@ -49,6 +42,4 @@ public class PurchaseVipMembershipExtensionEvent extends PurchaseEvent {
         }
 
     }
-
-
 }

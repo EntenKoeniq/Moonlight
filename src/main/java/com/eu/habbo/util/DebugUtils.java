@@ -1,7 +1,6 @@
 package com.eu.habbo.util;
 
 public class DebugUtils {
-
     // Code from https://stackoverflow.com/a/11306854/11849181
     public static StackTraceElement getCallerCallerStacktrace() {
         StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
@@ -18,5 +17,4 @@ public class DebugUtils {
         }
         return null;
     }
-
 }

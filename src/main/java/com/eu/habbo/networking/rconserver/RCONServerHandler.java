@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RCONServerHandler extends ChannelInboundHandlerAdapter {
-    
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
         String adress = ctx.channel().remoteAddress().toString().split(":")[0].replace("/", "");
@@ -31,15 +30,15 @@ public class RCONServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ByteBuf data = (ByteBuf) msg;
+        ByteBuf data = (ByteBuf)msg;
 
         byte[] d = new byte[data.readableBytes()];
         data.getBytes(0, d);
         String message = new String(d);
-        Gson gson = new Gson();
         String response = "ERROR";
         String key = "";
         try {
+            Gson gson = new Gson();
             JsonObject object = gson.fromJson(message, JsonObject.class);
             key = object.get("key").getAsString();
             response = Emulator.getRconServer().handle(ctx, key, object.get("data").toString());

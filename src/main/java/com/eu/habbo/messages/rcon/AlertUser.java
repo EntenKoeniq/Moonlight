@@ -5,7 +5,6 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.google.gson.Gson;
 
 public class AlertUser extends RCONMessage<AlertUser.JSONAlertUser> {
-
     public AlertUser() {
         super(JSONAlertUser.class);
     }
@@ -13,19 +12,16 @@ public class AlertUser extends RCONMessage<AlertUser.JSONAlertUser> {
     @Override
     public void handle(Gson gson, JSONAlertUser object) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(object.user_id);
-
-        if (habbo != null) {
-            habbo.alert(object.message);
+        if (habbo == null) {
+            this.status = RCONMessage.HABBO_NOT_FOUND;
+            return;
         }
 
-        this.status = RCONMessage.HABBO_NOT_FOUND;
+        habbo.alert(object.message);
     }
 
     static class JSONAlertUser {
-
         int user_id;
-
-
         String message;
     }
 }

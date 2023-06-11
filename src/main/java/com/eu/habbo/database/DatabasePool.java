@@ -10,12 +10,12 @@ class DatabasePool {
     public boolean getStoragePooling(ConfigurationManager config) {
         try {
             HikariConfig databaseConfiguration = new HikariConfig();
-            databaseConfiguration.setMaximumPoolSize(config.getInt("db.pool.maxsize", 50));
-            databaseConfiguration.setMinimumIdle(config.getInt("db.pool.minsize", 10));
-            databaseConfiguration.setJdbcUrl("jdbc:mysql://" + config.getValue("db.hostname", "localhost") + ":" + config.getValue("db.port", "3306") + "/" + config.getValue("db.database", "habbo") + config.getValue("db.params"));
-            databaseConfiguration.addDataSourceProperty("serverName", config.getValue("db.hostname", "localhost"));
-            databaseConfiguration.addDataSourceProperty("port", config.getValue("db.port", "3306"));
-            databaseConfiguration.addDataSourceProperty("databaseName", config.getValue("db.database", "habbo"));
+            databaseConfiguration.setMaximumPoolSize(config.getInt("db.pool.maxsize"));
+            databaseConfiguration.setMinimumIdle(config.getInt("db.pool.minsize"));
+            databaseConfiguration.setJdbcUrl("jdbc:mysql://" + config.getValue("db.hostname") + ":" + config.getValue("db.port") + "/" + config.getValue("db.database") + config.getValue("db.params"));
+            databaseConfiguration.addDataSourceProperty("serverName", config.getValue("db.hostname"));
+            databaseConfiguration.addDataSourceProperty("port", config.getValue("db.port"));
+            databaseConfiguration.addDataSourceProperty("databaseName", config.getValue("db.database"));
             databaseConfiguration.addDataSourceProperty("user", config.getValue("db.username"));
             databaseConfiguration.addDataSourceProperty("password", config.getValue("db.password"));
             databaseConfiguration.addDataSourceProperty("dataSource.logger", "com.mysql.jdbc.log.StandardLogger");
@@ -23,7 +23,6 @@ class DatabasePool {
             databaseConfiguration.addDataSourceProperty("dataSource.dumpQueriesOnException", "true");
             databaseConfiguration.addDataSourceProperty("prepStmtCacheSize", "500");
             databaseConfiguration.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-            // databaseConfiguration.addDataSourceProperty("dataSource.logWriter", Logging.getErrorsSQLWriter());
             databaseConfiguration.addDataSourceProperty("cachePrepStmts", "true");
             databaseConfiguration.addDataSourceProperty("useServerPrepStmts", "true");
             databaseConfiguration.addDataSourceProperty("rewriteBatchedStatements", "true");
@@ -34,7 +33,6 @@ class DatabasePool {
             databaseConfiguration.setLeakDetectionThreshold(20000L);
             databaseConfiguration.setMaxLifetime(1800000L);
             databaseConfiguration.setIdleTimeout(600000L);
-            //databaseConfiguration.setDriverClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
             this.database = new HikariDataSource(databaseConfiguration);
         } catch (Exception e) {
             return false;

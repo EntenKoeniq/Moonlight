@@ -3,7 +3,6 @@ package com.eu.habbo.plugin.events.navigator;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class NavigatorSearchResultEvent extends NavigatorRoomsEvent {

@@ -11,5 +11,4 @@ public class WiredChangeDirectionSetting {
     private final int item_id;
     private int rotation;
     @Setter private RoomUserRotation direction;
-
 }

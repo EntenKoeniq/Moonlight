@@ -8,9 +8,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class QuestCompletedMessageComposer extends MessageComposer {
-    private final UnknownClass unknownClass;
-    private final boolean unknowbOolean;
-
     @Override
     protected ServerMessage composeInternal() {
         this.response.init(Outgoing.questCompletedMessageComposer);

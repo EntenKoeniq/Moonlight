@@ -26,15 +26,12 @@ import java.util.stream.Stream;
 @Slf4j
 public class WiredHighscoreManager {
     private final HashMap<Integer, List<WiredHighscoreDataEntry>> data = new HashMap<>();
-    
-    private final static String locale = (System.getProperty("user.language") != null ? System.getProperty("user.language") : "en");
-    private final static String country = (System.getProperty("user.country") != null ? System.getProperty("user.country") : "US");
 
-    private final static DayOfWeek firstDayOfWeek = WeekFields.of(new Locale(locale, country)).getFirstDayOfWeek();
+    private final static DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
     private final static DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
     private final static ZoneId zoneId = ZoneId.systemDefault();
 
-    public static ScheduledFuture midnightUpdater = null;
+    public static ScheduledFuture<?> midnightUpdater = null;
 
     public void load() {
         long millis = System.currentTimeMillis();
@@ -103,41 +100,41 @@ public class WiredHighscoreManager {
     public List<WiredHighscoreRow> getHighscoreRowsForItem(int itemId, WiredHighscoreClearType clearType, WiredHighscoreScoreType scoreType) {
         if (!this.data.containsKey(itemId)) return null;
 
-        Stream<WiredHighscoreRow> highscores = new ArrayList<>(this.data.get(itemId)).stream()
-                .filter(entry -> this.timeMatchesEntry(entry, clearType) && (scoreType != WiredHighscoreScoreType.MOSTWIN || entry.isWin()))
-                .map(entry -> new WiredHighscoreRow(
-                        entry.getUserIds().stream()
-                                .map(id -> Emulator.getGameEnvironment().getHabboManager().getHabboInfo(id).getUsername())
-                                .collect(Collectors.toList()),
-                        entry.getScore()
-                ));
+        Stream<WiredHighscoreRow> highscores = new ArrayList<>(this.data.get(itemId))
+            .stream()
+            .filter(entry -> this.timeMatchesEntry(entry, clearType) && (scoreType != WiredHighscoreScoreType.MOSTWIN || entry.isWin()))
+            .map(entry -> new WiredHighscoreRow(
+                    entry.getUserIds().stream()
+                        .map(id -> Emulator.getGameEnvironment().getHabboManager().getHabboInfo(id).getUsername())
+                        .collect(Collectors.toList()),
+                    entry.getScore()
+                )
+            );
 
-        if (scoreType == WiredHighscoreScoreType.CLASSIC) {
+        if (scoreType == WiredHighscoreScoreType.CLASSIC)
             return highscores.sorted(WiredHighscoreRow::compareTo).collect(Collectors.toList());
-        }
 
-        if (scoreType == WiredHighscoreScoreType.PERTEAM) {
+        if (scoreType == WiredHighscoreScoreType.PERTEAM)
             return highscores
-                    .collect(Collectors.groupingBy(h -> h.getUsers().hashCode()))
-                    .values()
-                    .stream()
-                    .map(wiredHighscoreRows -> wiredHighscoreRows.stream()
-                            .sorted(WiredHighscoreRow::compareTo).toList()
-                            .get(0)
-                    )
-                    .sorted(WiredHighscoreRow::compareTo)
-                    .collect(Collectors.toList());
-        }
+                .collect(Collectors.groupingBy(h -> h.getUsers().hashCode()))
+                .values()
+                .stream()
+                .map(
+                    wiredHighscoreRows -> wiredHighscoreRows.stream()
+                        .sorted(WiredHighscoreRow::compareTo).toList()
+                        .get(0)
+                )
+                .sorted(WiredHighscoreRow::compareTo)
+                .collect(Collectors.toList());
 
-        if (scoreType == WiredHighscoreScoreType.MOSTWIN) {
+        if (scoreType == WiredHighscoreScoreType.MOSTWIN)
             return highscores
-                    .collect(Collectors.groupingBy(h -> h.getUsers().hashCode()))
-                    .values()
-                    .stream()
-                    .map(wiredHighscoreRows -> new WiredHighscoreRow(wiredHighscoreRows.get(0).getUsers(), wiredHighscoreRows.size()))
-                    .sorted(WiredHighscoreRow::compareTo)
-                    .collect(Collectors.toList());
-        }
+                .collect(Collectors.groupingBy(h -> h.getUsers().hashCode()))
+                .values()
+                .stream()
+                .map(wiredHighscoreRows -> new WiredHighscoreRow(wiredHighscoreRows.get(0).getUsers(), wiredHighscoreRows.size()))
+                .sorted(WiredHighscoreRow::compareTo)
+                .collect(Collectors.toList());
 
         return null;
     }
@@ -152,7 +149,6 @@ public class WiredHighscoreManager {
                     entry.getTimestamp() > this.getMonthStartTimestamp() && entry.getTimestamp() < this.getMonthEndTimestamp();
             case ALLTIME -> true;
         };
-
     }
 
     private long getTodayStartTimestamp() {

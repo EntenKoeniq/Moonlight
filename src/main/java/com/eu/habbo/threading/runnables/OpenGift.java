@@ -80,6 +80,9 @@ public class OpenGift implements Runnable {
                             unseenItems.put(UnseenItemsComposer.AddHabboItemCategory.BOT, new ArrayList<>());
                         unseenItems.get(UnseenItemsComposer.AddHabboItemCategory.BOT).add(item.getGiftAdjustedId());
                     }
+                    case EFFECT -> {}
+                    case HABBO_CLUB -> {}
+                    default -> {}
                 }
             }
 

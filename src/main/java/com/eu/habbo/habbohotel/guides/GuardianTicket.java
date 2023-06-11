@@ -140,7 +140,7 @@ public class GuardianTicket {
                 Emulator.getGameEnvironment().getGuideManager().findGuardians(this);
             }
         } else {
-            this.verdict = this.calculateVerdict();
+            this.verdict = GuardianVoteType.BADLY;
 
             for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
                 if (set.getValue().type == GuardianVoteType.ACCEPTABLY ||
@@ -162,34 +162,6 @@ public class GuardianTicket {
 
     public boolean inProgress() {
         return this.verdict == null;
-    }
-
-
-    public GuardianVoteType calculateVerdict() {
-        int countAcceptably = 0;
-        int countBadly = 0;
-        int countAwfully = 0;
-        int total = 0;
-
-        synchronized (this.votes) {
-            for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
-                GuardianVote vote = set.getValue();
-
-                if (vote.type == GuardianVoteType.ACCEPTABLY) {
-                    countAcceptably++;
-                } else if (vote.type == GuardianVoteType.BADLY) {
-                    countBadly++;
-                } else if (vote.type == GuardianVoteType.AWFULLY) {
-                    countAwfully++;
-                }
-            }
-        }
-
-        total += countAcceptably;
-        total += countBadly;
-
-
-        return GuardianVoteType.BADLY;
     }
 
     public GuardianVote getVoteForGuardian(Habbo guardian) {

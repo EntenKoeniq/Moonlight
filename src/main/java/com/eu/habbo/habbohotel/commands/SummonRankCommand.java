@@ -7,8 +7,6 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.rooms.RoomForwardMessageComposer;
 
-import java.util.Map;
-
 public class SummonRankCommand extends Command {
     public SummonRankCommand() {
         super("cmd_summonrank", Emulator.getTexts().getValue("commands.keys.cmd_summonrank").split(";"));

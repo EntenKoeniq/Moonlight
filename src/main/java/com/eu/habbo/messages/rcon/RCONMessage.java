@@ -6,21 +6,11 @@ import lombok.Getter;
 import java.lang.reflect.Type;
 
 public abstract class RCONMessage<T> {
-
     public final static int STATUS_OK = 0;
-
-
     public final static int STATUS_ERROR = 1;
-
-
     public final static int HABBO_NOT_FOUND = 2;
-
-
     public final static int ROOM_NOT_FOUND = 3;
-
-
     public final static int SYSTEM_ERROR = 4;
-
 
     @Getter protected final Class<T> type;
     @Getter protected int status = STATUS_OK;
@@ -32,9 +22,9 @@ public abstract class RCONMessage<T> {
 
     public abstract void handle(Gson gson, T json);
 
-    public static class RCONMessageSerializer implements JsonSerializer<RCONMessage> {
+    public static class RCONMessageSerializer implements JsonSerializer<RCONMessage<?>> {
         @Override
-        public JsonElement serialize(final RCONMessage rconMessage, final Type type, final JsonSerializationContext context) {
+        public JsonElement serialize(final RCONMessage<?> rconMessage, final Type type, final JsonSerializationContext context) {
             JsonObject result = new JsonObject();
             result.add("status", new JsonPrimitive(rconMessage.status));
             result.add("message", new JsonPrimitive(rconMessage.message));

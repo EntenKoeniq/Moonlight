@@ -15,9 +15,6 @@ import java.io.IOException;
 @ChannelHandler.Sharable
 @Slf4j
 public class GameMessageHandler extends ChannelInboundHandlerAdapter {
-    
-
-
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
         if (!Emulator.getGameServer().getGameClientManager().addClient(ctx)) {
@@ -59,6 +56,7 @@ public class GameMessageHandler extends ChannelInboundHandlerAdapter {
             ctx.channel().close();
             return;
         }
+        
         if (Emulator.getConfig().getBoolean("debug.mode")) {
             if (cause instanceof TooLongFrameException) {
                 log.error("Disconnecting client, reason: \"" + cause.getMessage() + "\".");

@@ -14,7 +14,6 @@ public class ImageAlertUser extends RCONMessage<ImageAlertUser.JSON> {
     @Override
     public void handle(Gson gson, JSON json) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(json.user_id);
-
         if (habbo == null) {
             this.status = HABBO_NOT_FOUND;
             return;
@@ -50,28 +49,13 @@ public class ImageAlertUser extends RCONMessage<ImageAlertUser.JSON> {
     }
 
     static class JSON {
-
         public int user_id;
-
-
         public String bubble_key = "";
-
-
         public String message = "";
-
-
         public String url = "";
-
-
         public String url_message = "";
-
-
         public String title = "";
-
-
         public String display_type = "";
-
-
         public String image = "";
     }
 }

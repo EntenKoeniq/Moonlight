@@ -43,7 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.eu.habbo.database.DatabaseConstants.CAUGHT_SQL_EXCEPTION;
 

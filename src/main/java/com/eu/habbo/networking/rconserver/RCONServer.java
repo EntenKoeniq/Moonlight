@@ -18,8 +18,7 @@ import java.util.List;
 
 @Slf4j
 public class RCONServer extends Server {
-    
-    private final THashMap<String, Class<? extends RCONMessage>> messages;
+    private final THashMap<String, Class<? extends RCONMessage<?>>> messages;
     private final GsonBuilder gsonBuilder;
     @Getter
     private final List<String> allowedAdresses = new ArrayList<>();
@@ -79,22 +78,22 @@ public class RCONServer extends Server {
         });
     }
 
-
-    public void addRCONMessage(String key, Class<? extends RCONMessage> clazz) {
+    public void addRCONMessage(String key, Class<? extends RCONMessage<?>> clazz) {
         this.messages.put(key, clazz);
     }
 
     public String handle(ChannelHandlerContext ctx, String key, String body) {
-        Class<? extends RCONMessage> message = this.messages.get(key.replace("_", "").toLowerCase());
+        Class<? extends RCONMessage<?>> message = this.messages.get(key.replace("_", "").toLowerCase());
 
-        String result;
-        if (message != null) {
+        if (message == null) {
+            log.error("Couldn't find: {}", key);
+        } else {
             try {
                 RCONMessage rcon = message.getDeclaredConstructor().newInstance();
                 Gson gson = this.gsonBuilder.create();
                 rcon.handle(gson, gson.fromJson(body, rcon.getType()));
                 log.info("Handled RCON Message: {}", message.getSimpleName());
-                result = gson.toJson(rcon, RCONMessage.class);
+                String result = gson.toJson(rcon, RCONMessage.class);
 
                 if (Emulator.debugging) {
                     log.debug("RCON Data {} RCON Result {}", body, result);
@@ -104,8 +103,6 @@ public class RCONServer extends Server {
             } catch (Exception ex) {
                 log.error("Failed to handle RCONMessage", ex);
             }
-        } else {
-            log.error("Couldn't find: {}", key);
         }
 
         throw new ArrayIndexOutOfBoundsException("Unhandled RCON Message");

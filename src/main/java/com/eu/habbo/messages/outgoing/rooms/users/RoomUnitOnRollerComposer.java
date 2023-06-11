@@ -10,13 +10,10 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class RoomUnitOnRollerComposer extends MessageComposer {
     // THIS IS WRONG SlideObjectBundleMessageComposer
-    private static final Logger LOGGER = LoggerFactory.getLogger(RoomUnitOnRollerComposer.class);
     private final RoomUnit roomUnit;
     private final HabboItem roller;
     private final RoomTile oldLocation;
@@ -24,8 +21,6 @@ public class RoomUnitOnRollerComposer extends MessageComposer {
     private final RoomTile newLocation;
     private final double newZ;
     private final Room room;
-    private int x;
-    private int y;
     private final HabboItem oldTopItem;
 
     public RoomUnitOnRollerComposer(RoomUnit roomUnit, HabboItem roller, RoomTile oldLocation, double oldZ, RoomTile newLocation, double newZ, Room room) {

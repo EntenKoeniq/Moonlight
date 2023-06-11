@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 public class GameByteFrameDecoder extends LengthFieldBasedFrameDecoder {
-
     /**
      * MAX_PACKET_LENGTH is based on the maximum camera PNG size.
      * Source: https://superuser.com/a/759030
@@ -28,5 +27,4 @@ public class GameByteFrameDecoder extends LengthFieldBasedFrameDecoder {
     {
         return super.decode(ctx, in);
     }
-
 }

@@ -13,7 +13,6 @@ public class CommunityGoalProgressMessageComposer extends MessageComposer {
     private final int totalAmount;
     private final int communityHighestAchievedLevel;
     private final int scoreRemainingUntilNextLevel;
-    private final int percentCompletionTowardsNextLevel;
     private final String competitionName;
     private final int timeLeft;
     private final int[] rankData;

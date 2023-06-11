@@ -10,8 +10,6 @@ import java.util.HashMap;
 
 @Slf4j
 public class PacketNames {
-
-
     private final HashMap<Integer, String> incoming;
     private final HashMap<Integer, String> outgoing;
 
@@ -53,5 +51,4 @@ public class PacketNames {
             }
         }
     }
-
 }

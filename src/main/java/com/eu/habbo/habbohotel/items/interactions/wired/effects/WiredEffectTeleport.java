@@ -79,7 +79,7 @@ public class WiredEffectTeleport extends InteractionWiredEffect {
         }
 
         Emulator.getThreading().run(() -> { roomUnit.setWiredTeleporting(true); }, Math.max(0, WiredHandler.TELEPORT_DELAY - 500));
-        Emulator.getThreading().run(new RoomUnitTeleport(roomUnit, room, tile.getX(), tile.getY(), tile.getStackHeight() + (tile.getState() == RoomTileState.SIT ? -0.5 : 0), roomUnit.getEffectId()), WiredHandler.TELEPORT_DELAY);
+        Emulator.getThreading().run(new RoomUnitTeleport(roomUnit, room, tile.getX(), tile.getY(), tile.getStackHeight() + (tile.getState() == RoomTileState.SIT ? -0.5 : 0)), WiredHandler.TELEPORT_DELAY);
     }
 
     @Override

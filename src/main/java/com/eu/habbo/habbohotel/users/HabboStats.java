@@ -647,19 +647,25 @@ public class HabboStats implements Runnable {
     }
 
     public int talentTrackLevel(TalentTrackType type) {
-        if (type == TalentTrackType.CITIZENSHIP)
-            return this.citizenshipLevel;
-        else if (type == TalentTrackType.HELPER)
-            return this.helpersLevel;
-
-        return -1;
+        switch (type) {
+            case CITIZENSHIP:
+                return this.citizenshipLevel;
+            case HELPER:
+                return this.helpersLevel;
+            default:
+                return -1;
+        }
     }
 
     public void setTalentLevel(TalentTrackType type, int level) {
-        if (type == TalentTrackType.CITIZENSHIP)
-            this.citizenshipLevel = level;
-        else if (type == TalentTrackType.HELPER)
-            this.helpersLevel = level;
+        switch (type) {
+            case CITIZENSHIP:
+                this.citizenshipLevel = level;
+                return;
+            case HELPER:
+                this.helpersLevel = level;
+                return;
+        }
     }
 
     public int addMuteTime(int seconds) {

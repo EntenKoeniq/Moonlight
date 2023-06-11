@@ -8,7 +8,7 @@ import com.eu.habbo.messages.outgoing.guides.GuideSessionErrorMessageComposer;
 public class GuideSessionCreateEvent extends MessageHandler {
     @Override
     public void handle() {
-        int type = this.packet.readInt();
+        this.packet.readInt();
         String message = this.packet.readString();
 
         GuideTour activeTour = Emulator.getGameEnvironment().getGuideManager().getGuideTourByHabbo(this.client.getHabbo());

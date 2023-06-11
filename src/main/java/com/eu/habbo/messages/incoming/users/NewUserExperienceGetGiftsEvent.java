@@ -8,7 +8,7 @@ import com.eu.habbo.plugin.events.users.UserPickGiftEvent;
 public class NewUserExperienceGetGiftsEvent extends MessageHandler {
     @Override
     public void handle() {
-        int totalItems = this.packet.readInt(); //total items
+        this.packet.readInt(); //total items
         int keyA = this.packet.readInt(); //key 1
         int keyB = this.packet.readInt(); //key 2
         int index = this.packet.readInt();

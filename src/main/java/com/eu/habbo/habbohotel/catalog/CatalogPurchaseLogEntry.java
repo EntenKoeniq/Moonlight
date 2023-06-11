@@ -3,12 +3,10 @@ package com.eu.habbo.habbohotel.catalog;
 import com.eu.habbo.Emulator;
 import com.eu.habbo.core.DatabaseLoggable;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-@Slf4j
 @AllArgsConstructor
 public class CatalogPurchaseLogEntry implements Runnable, DatabaseLoggable {
 

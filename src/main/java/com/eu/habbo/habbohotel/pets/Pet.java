@@ -95,7 +95,6 @@ public class Pet implements ISerialize, Runnable {
     /**
      * The tick timeout of the pet.
      */
-    private int tickTimeout = Emulator.getIntUnixTimestamp();
     private int happinessDelay = Emulator.getIntUnixTimestamp();
     private int gestureTickTimeout = Emulator.getIntUnixTimestamp();
 

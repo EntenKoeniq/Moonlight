@@ -8,16 +8,13 @@ import ch.qos.logback.core.spi.FilterReply;
 import java.sql.SQLException;
 
 public class SqlExceptionFilter extends Filter<ILoggingEvent> {
-
     @Override
     public FilterReply decide(ILoggingEvent event) {
         ThrowableProxy proxy = (ThrowableProxy) event.getThrowableProxy();
 
-        if (proxy.getThrowable() instanceof SQLException){
+        if (proxy.getThrowable() instanceof SQLException)
             return FilterReply.ACCEPT;
-        }
 
         return FilterReply.DENY;
     }
-
 }

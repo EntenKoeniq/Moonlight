@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.JSON> {
-
     public ModifyUserSubscription() {
         super(ModifyUserSubscription.JSON.class);
     }
@@ -16,7 +15,6 @@ public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.J
     @Override
     public void handle(Gson gson, JSON json) {
         try {
-
             if(json.user_id <= 0) {
                 this.status = RCONMessage.HABBO_NOT_FOUND;
                 this.message = "User not found";
@@ -30,7 +28,6 @@ public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.J
             }
 
             HabboInfo habbo = Emulator.getGameEnvironment().getHabboManager().getHabboInfo(json.user_id);
-
             if (habbo == null) {
                 this.status = RCONMessage.HABBO_NOT_FOUND;
                 this.message = "User not found";
@@ -49,7 +46,6 @@ public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.J
                 this.message = "Successfully added %time% seconds to %subscription% on %user%".replace("%time%", json.duration + "").replace("%user%", habbo.getUsername()).replace("%subscription%", json.type);
             } else if (json.action.equalsIgnoreCase("remove") || json.action.equalsIgnoreCase("-") || json.action.equalsIgnoreCase("r")) {
                 Subscription s = habbo.getHabboStats().getSubscription(json.type);
-
                 if (s == null) {
                     this.status = RCONMessage.STATUS_ERROR;
                     this.message = "%user% does not have the %subscription% subscription".replace("%user%", habbo.getUsername()).replace("%subscription%", json.type);
@@ -71,8 +67,7 @@ public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.J
                     this.status = RCONMessage.STATUS_OK;
                     this.message = "Successfully removed %subscription% sub from %user%".replace("%user%", habbo.getUsername()).replace("%subscription%", json.type);
                 }
-            }
-            else {
+            } else {
                 this.status = RCONMessage.STATUS_ERROR;
                 this.message = "Invalid action specified. Must be add, +, remove or -";
             }
@@ -85,14 +80,9 @@ public class ModifyUserSubscription extends RCONMessage<ModifyUserSubscription.J
     }
 
     static class JSON {
-
         public int user_id;
-
         public String type = ""; // Subscription type e.g. HABBO_CLUB
-
         public String action = ""; // Can be add or remove
-
         public int duration = -1; // Time to add/remove in seconds. -1 means remove subscription entirely
-
     }
 }

@@ -14,7 +14,6 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.incoming.wired.WiredSaveException;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemOnRollerComposer;
 import gnu.trove.set.hash.THashSet;
-import lombok.extern.slf4j.Slf4j;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class WiredEffectMoveRotateFurni extends InteractionWiredEffect implements ICycleable {
 
     public static final WiredEffectType type = WiredEffectType.MOVE_ROTATE;

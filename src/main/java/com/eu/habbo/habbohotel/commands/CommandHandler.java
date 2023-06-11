@@ -190,7 +190,6 @@ public class CommandHandler {
         addCommand(new AboutCommand());
         addCommand(new AlertCommand());
         addCommand(new AllowTradingCommand());
-        addCommand(new ArcturusCommand());
         addCommand(new BadgeCommand());
         addCommand(new BanCommand());
         addCommand(new BlockAlertCommand());
@@ -199,7 +198,6 @@ public class CommandHandler {
         addCommand(new ChangeNameCommand());
         addCommand(new ChatTypeCommand());
         addCommand(new CommandsCommand());
-        addCommand(new ConnectCameraCommand());
         addCommand(new ControlCommand());
         addCommand(new CoordsCommand());
         addCommand(new CreditsCommand());

@@ -21,7 +21,7 @@ public class PurchaseRoomAdEvent extends MessageHandler {
         int itemId = this.packet.readInt();
         int roomId = this.packet.readInt();
         String title = this.packet.readString();
-        boolean extendedPromotion = this.packet.readBoolean();
+        this.packet.readBoolean();
         String description = this.packet.readString();
         int categoryId = this.packet.readInt();
 

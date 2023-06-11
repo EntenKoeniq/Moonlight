@@ -18,22 +18,11 @@ public class CreateModToolTicket extends RCONMessage<CreateModToolTicket.JSON> {
     }
 
     static class JSON {
-
         public int sender_id;
-
-
         public String sender_username;
-
-
         public int reported_id;
-
-
         public String reported_username;
-
-
         public final int reported_room_id = 0;
-
-
         public String message;
     }
 }

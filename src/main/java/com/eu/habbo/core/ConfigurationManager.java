@@ -2,7 +2,6 @@ package com.eu.habbo.core;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.plugin.events.emulator.EmulatorConfigUpdatedEvent;
-import gnu.trove.map.hash.THashMap;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -32,66 +31,19 @@ public class ConfigurationManager {
 
         InputStream input = null;
 
-        String envDbHostname = System.getenv("DB_HOSTNAME");
-
-        boolean useEnvVarsForDbConnection = false;
-
-        if(envDbHostname != null)
-        {
-            useEnvVarsForDbConnection = envDbHostname.length() > 1;
-        }
-
-        if (!useEnvVarsForDbConnection) {
-            try {
-                File f = new File(this.configurationPath);
-                input = Files.newInputStream(f.toPath());
-                this.properties.load(input);
-
-            } catch (IOException ex) {
-                log.error("Failed to load config file.", ex);
-                ex.printStackTrace();
-            } finally {
-                if (input != null) {
-                    try {
-                        input.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        } else {
-
-            Map<String, String> envMapping = new THashMap<>();
-
-            // Database section
-            envMapping.put("db.hostname", "DB_HOSTNAME");
-            envMapping.put("db.port", "DB_PORT");
-            envMapping.put("db.database", "DB_DATABASE");
-            envMapping.put("db.username", "DB_USERNAME");
-            envMapping.put("db.password", "DB_PASSWORD");
-            envMapping.put("db.params", "DB_PARAMS");
-
-            // Game Configuration
-            envMapping.put("game.host", "EMU_HOST");
-            envMapping.put("game.port", "EMU_PORT");
-
-            // RCON
-            envMapping.put("rcon.host", "RCON_HOST");
-            envMapping.put("rcon.port", "RCON_PORT");
-            envMapping.put("rcon.allowed", "RCON_ALLOWED");
-
-            // Runtime
-            envMapping.put("runtime.threads", "RT_THREADS");
-            envMapping.put("logging.errors.runtime", "RT_LOG_ERRORS");
-
-            for (Map.Entry<String, String> entry : envMapping.entrySet()) {
-                String envValue = System.getenv(entry.getValue());
-
-                if (envValue == null || envValue.length() == 0) {
-                    log.info("Cannot find environment-value for variable `" + entry.getValue() + "`");
-                } else {
-                    this.properties.setProperty(entry.getKey(), envValue);
+        try {
+            File f = new File(this.configurationPath);
+            input = Files.newInputStream(f.toPath());
+            this.properties.load(input);
+        } catch (IOException ex) {
+            log.error("Failed to load config file.", ex);
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -110,7 +62,6 @@ public class ConfigurationManager {
 
     public void loadFromDatabase() {
         log.info("Loading configuration from database...");
-
         long millis = System.currentTimeMillis();
         try (Connection connection = Emulator.getDatabase().getDataSource().getConnection(); Statement statement = connection.createStatement()) {
             if (statement.execute("SELECT * FROM emulator_settings")) {
@@ -123,7 +74,6 @@ public class ConfigurationManager {
         } catch (SQLException e) {
             log.error("Caught SQL exception", e);
         }
-
         log.info("Configuration -> loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
     }
 
@@ -139,11 +89,9 @@ public class ConfigurationManager {
         }
     }
 
-
     public String getValue(String key) {
         return this.getValue(key, "");
     }
-
 
     public String getValue(String key, String defaultValue) {
         if (this.isLoading)

@@ -16,7 +16,6 @@ public class MarketplaceOffersComposer extends MessageComposer {
     @Override
     protected ServerMessage composeInternal() {
         this.response.init(Outgoing.marketplaceOffersComposer);
-        int total = 0;
         this.response.appendInt(this.offers.size());
 
         for (MarketPlaceOffer offer : this.offers) {
@@ -37,8 +36,6 @@ public class MarketplaceOffersComposer extends MessageComposer {
             this.response.appendInt(0);
             this.response.appendInt(MarketPlace.calculateCommision(offer.average));
             this.response.appendInt(offer.count);
-
-            total += offer.count;
         }
         this.response.appendInt(this.offers.size());
         return this.response;

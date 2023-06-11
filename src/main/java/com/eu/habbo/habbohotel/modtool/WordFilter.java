@@ -35,12 +35,6 @@ public class WordFilter {
         log.info("WordFilter -> Loaded! (" + (System.currentTimeMillis() - start) + " MS)");
     }
 
-    private static String stripDiacritics(String str) {
-        str = Normalizer.normalize(str, Normalizer.Form.NFD);
-        str = DIACRITICS_AND_FRIENDS.matcher(str).replaceAll("");
-        return str;
-    }
-
     public synchronized void reload() {
         if (!Emulator.getConfig().getBoolean("hotel.wordfilter.enabled", true))
             return;

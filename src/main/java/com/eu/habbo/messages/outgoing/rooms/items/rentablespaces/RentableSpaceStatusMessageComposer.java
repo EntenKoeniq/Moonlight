@@ -2,7 +2,6 @@ package com.eu.habbo.messages.outgoing.rooms.items.rentablespaces;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.items.interactions.InteractionRentableSpace;
-import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
@@ -26,7 +25,6 @@ public class RentableSpaceStatusMessageComposer extends MessageComposer {
     public static final int CANT_RENT_GENERIC = 400;
     //:test 194 b:1 i:101 i:1 s:Admin i:10 i:10
 
-    private final Habbo habbo;
     private final HabboItem item;
     private int errorCode = 0;
 

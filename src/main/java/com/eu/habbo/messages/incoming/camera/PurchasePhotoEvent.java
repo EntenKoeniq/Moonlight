@@ -27,19 +27,31 @@ public class PurchasePhotoEvent extends MessageHandler {
             return;
         }
 
-        if (this.client.getHabbo().getHabboInfo().getPhotoTimestamp() == 0) return;
-        if (this.client.getHabbo().getHabboInfo().getPhotoJSON().isEmpty()) return;
-        if (!this.client.getHabbo().getHabboInfo().getPhotoJSON().contains(this.client.getHabbo().getHabboInfo().getPhotoTimestamp() + ""))
+        if (this.client.getHabbo().getHabboInfo().getPhotoTimestamp() == 0)
+            return;
+        if (this.client.getHabbo().getHabboInfo().getPhotoJSON().isEmpty())
+            return;
+        if (!this.client.getHabbo().getHabboInfo().getPhotoJSON().contains(Integer.toString(this.client.getHabbo().getHabboInfo().getPhotoTimestamp())))
             return;
 
-        if (Emulator.getPluginManager().fireEvent(new UserPurchasePictureEvent(this.client.getHabbo(), this.client.getHabbo().getHabboInfo().getPhotoURL(), this.client.getHabbo().getHabboInfo().getCurrentRoom().getId(), this.client.getHabbo().getHabboInfo().getPhotoTimestamp())).isCancelled()) {
+        UserPurchasePictureEvent purchaseEvent = new UserPurchasePictureEvent(
+            this.client.getHabbo(),
+            this.client.getHabbo().getHabboInfo().getPhotoURL(),
+            this.client.getHabbo().getHabboInfo().getCurrentRoom().getId(),
+            this.client.getHabbo().getHabboInfo().getPhotoTimestamp()
+        );
+        if (Emulator.getPluginManager().fireEvent(purchaseEvent).isCancelled())
             return;
-        }
 
-        HabboItem photoItem = Emulator.getGameEnvironment().getItemManager().createItem(this.client.getHabbo().getHabboInfo().getId(), Emulator.getGameEnvironment().getItemManager().getItem(Emulator.getConfig().getInt("camera.item_id")), 0, 0, this.client.getHabbo().getHabboInfo().getPhotoJSON());
-
+        HabboItem photoItem = Emulator.getGameEnvironment().getItemManager().createItem(
+            this.client.getHabbo().getHabboInfo().getId(),
+            Emulator.getGameEnvironment().getItemManager().getItem(Emulator.getConfig().getInt("camera.item_id")),
+            0,
+            0,
+            this.client.getHabbo().getHabboInfo().getPhotoJSON()
+        );
         if (photoItem != null) {
-            photoItem.setExtradata(photoItem.getExtradata().replace("%id%", photoItem.getId() + ""));
+            photoItem.setExtradata(photoItem.getExtradata().replace("%id%", Integer.toString(photoItem.getId())));
             photoItem.needsUpdate(true);
 
             this.client.getHabbo().getInventory().getItemsComponent().addItem(photoItem);

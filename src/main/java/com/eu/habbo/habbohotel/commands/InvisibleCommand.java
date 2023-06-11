@@ -23,7 +23,7 @@ public class InvisibleCommand extends Command {
         if (roomUnit.isInvisible()) {
             RoomLayout roomLayout = roomUnit.getRoom().getLayout();
 
-            new RoomUnitTeleport(roomUnit, roomUnit.getRoom(), roomLayout.getDoorTile().getX(), roomLayout.getDoorTile().getY(), roomLayout.getDoorTile().getZ(), 0).run();
+            new RoomUnitTeleport(roomUnit, roomUnit.getRoom(), roomLayout.getDoorTile().getX(), roomLayout.getDoorTile().getY(), roomLayout.getDoorTile().getZ()).run();
 
             roomUnit.setInvisible(false)
                     .setInRoom(true);
